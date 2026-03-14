@@ -33,6 +33,33 @@ The data resets on every restart, which is intentional for a development environ
 
 ---
 
+## Serving the HTML Page
+
+The CAP backend serves *data*. It does not serve your HTML file.
+That is a second, separate process.
+
+In Stage 1 you double-clicked `index.html` directly. That works when there are no network
+calls, but in Stage 2 the page uses `fetch()` — and browsers block `fetch()` from
+`file://` URLs for security reasons. The page must be delivered over HTTP, which means
+you need a server to deliver it.
+
+`npx serve` is that server. It is a minimal static file server: give it a folder,
+and it will serve whatever files are in that folder over HTTP. It knows nothing about
+OData, CAP, or your data model. Its only job is to hand the HTML file to the browser
+when asked.
+
+```bash
+npx serve src/frontend/stage2-fetch
+```
+
+It will print a local URL — typically `http://localhost:3000`. That is the address
+your browser will use to load the page.
+
+Note that `npx serve` does not need to be installed first — `npx` downloads and runs
+it on demand. Leave this terminal running alongside your `npm run watch` terminal.
+
+---
+
 ## Three Processes, Two Servers
 
 When you run Stage 2, three separate things are running at once:
@@ -183,46 +210,28 @@ this is where you look first — it shows you exactly what was requested and wha
 
 ## Exercise: Stage 2
 
-You need to start two separate processes before opening the browser.
-Referring back to the diagram above: one process serves the HTML file,
-the other serves the data. Neither knows about the other — only the browser talks to both.
+You need two terminals running before you open the browser.
 
-**Process 1 — the OData backend** (the data server, port 4004):
-
+**Terminal 1 — data server:**
 ```bash
 cd src/backend
 npm run watch
 ```
+Wait until you see `server listening on { url: 'http://localhost:4004' }`.
 
-Leave this terminal running. You should see `server listening on { url: 'http://localhost:4004' }`.
-
-**Process 2 — the static file server** (the HTML server, port 3000):
-
-Open a second terminal and run:
-
+**Terminal 2 — page server:**
 ```bash
 npx serve src/frontend/stage2-fetch
 ```
+Note the URL it prints (typically `http://localhost:3000`).
 
-`npx serve` is a simple file server — it has no knowledge of OData or CAP.
-Its only job is to deliver the `index.html` file to your browser when asked.
-The reason you can't just double-click `index.html` is that browsers block `fetch()`
-calls from `file://` URLs for security reasons — the file must be served over HTTP.
+**Browser:**
 
-It will print a URL, something like `http://localhost:3000`. Leave this terminal running too.
-
-**Process 3 — the browser** (your Chrome or Edge):
-
-Open the URL that `npx serve` printed. The page loads in two steps:
-1. The browser fetches `index.html` from `npx serve` (port 3000)
-2. The JavaScript in that page calls `fetch()` to get product data from CAP (port 4004)
-
-The product table should populate with live data.
-
-**Then:**
-
-4. Open DevTools → Network → reload → you should see two requests: one for `index.html`, one for `Products`
-5. Click the `Products` request and examine the JSON response
+1. Open the URL from Terminal 2
+2. The product table should load with live data
+3. Open DevTools → **Network** tab → reload the page
+4. You should see two requests: one for `index.html` (from port 3000), one for `Products` (from port 4004)
+5. Click the `Products` request → **Response** tab → examine the JSON
 6. Compare it to the hardcoded array in `src/frontend/stage1-basics/index.html`
 
 When the table loads with real data from the server, you have made your first OData call.
