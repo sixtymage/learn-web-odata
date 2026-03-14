@@ -1,18 +1,28 @@
 # ============================================================
 # docker-compose.yml — Three-Tier Setup (Stage 7)
 #
-# Starts two services:
-#   db      — PostgreSQL database
-#   backend — SAP CAP service connected to PostgreSQL
+# Defines three services:
+#   db       — PostgreSQL database (persistent volume)
+#   pgadmin  — pgAdmin 4 web UI for browsing the database
+#   backend  — SAP CAP service connected to PostgreSQL (optional —
+#              use 'npm run watch:pg' locally instead for development)
 #
-# Usage:
-#   docker compose up        # start both services
-#   docker compose up -d     # start in background (detached)
-#   docker compose down      # stop and remove containers
-#   docker compose logs -f   # tail logs from all services
+# Typical Stage 7 usage (run CAP locally, DB + pgAdmin in Docker):
+#   docker compose up -d db pgadmin   # start just the database + pgAdmin
+#   npm run watch:pg                  # run CAP locally against the DB
 #
-# After starting:
-#   http://localhost:4004/odata/v4/catalog/Products
+# Or run everything in Docker:
+#   docker compose up -d              # start all three services
+#
+# Other useful commands:
+#   docker compose ps                 # check what's running
+#   docker compose logs -f pgadmin   # tail pgAdmin logs
+#   docker compose down              # stop and remove containers
+#   docker compose down -v           # also delete the data volume
+#
+# URLs when running:
+#   http://localhost:4004/odata/v4/catalog/Products  (CAP OData)
+#   http://localhost:5050                             (pgAdmin)
 #
 # ABAP analogy:
 #   db      = the database server (like HANA or DB2)
@@ -87,7 +97,7 @@ services:
   # and see the same rows — showing CAP is just a layer on top.
   #
   # URL:      http://localhost:5050
-  # Email:    admin@learn.local
+  # Email:    admin@example.com
   # Password: admin
   #
   # To connect to the database inside pgAdmin:
@@ -100,7 +110,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:
-      PGADMIN_DEFAULT_EMAIL:    admin@learn.local
+      PGADMIN_DEFAULT_EMAIL:    admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"

@@ -52,7 +52,7 @@ After completing this stage you will have four server processes running alongsid
                            └──────────────────────────┘
 ```
 
-The key moment: run a SQL query against `catalog_Products` in pgAdmin,
+The key moment: run a SQL query against `products_db_products` in pgAdmin,
 then open the same data via the OData endpoint in the browser.
 CAP is a translation layer — the data lives in PostgreSQL either way.
 
@@ -107,9 +107,9 @@ This runs `cds deploy --profile postgres`, which:
 You will see output like:
 ```
 Deploying to db [postgres]...
-  > CREATE TABLE catalog_Products (...)
-  > CREATE TABLE catalog_Categories (...)
-  > INSERT INTO catalog_Products ...
+  > CREATE TABLE products_db_products (...)
+  > CREATE TABLE products_db_categories (...)
+  > INSERT INTO products_db_products ...
 ```
 
 **ABAP analogy:** This is like running a transport that creates Dictionary objects
@@ -137,16 +137,41 @@ You should see:
 ```
 
 Open `http://localhost:4004/odata/v4/catalog/Products` — same data, same URLs,
-same responses as before. The frontend stages work without any changes.
+same responses as before.
 
 ---
 
-## Step 4 — Query the Database Directly in pgAdmin
+## Step 4 — Confirm the UI Works Unchanged
+
+In a second terminal, start the frontend server:
+
+```bash
+npx serve src/frontend/stage6-openui5-mvc
+```
+
+Open `http://localhost:3000` in your browser. The Stage 6 Fiori app loads and
+displays the product list exactly as before.
+
+Nothing in the frontend changed. The UI is still calling
+`http://localhost:4004/odata/v4/catalog/Products` — it has no idea whether
+CAP is talking to an in-memory SQLite file or a PostgreSQL container. That is
+the point: the OData contract between the UI and the service is the same
+regardless of what sits behind it.
+
+Open DevTools → Network tab and confirm you still see the same requests:
+- `GET /odata/v4/catalog/$metadata`
+- `GET /odata/v4/catalog/Products?$count=true&$select=...`
+
+Same URLs, same JSON responses, real database.
+
+---
+
+## Step 5 — Query the Database Directly in pgAdmin
 
 Open `http://localhost:5050` in your browser.
 
 **Log in:**
-- Email: `admin@learn.local`
+- Email: `admin@example.com`
 - Password: `admin`
 
 **Register the database server:**
@@ -155,7 +180,7 @@ Open `http://localhost:5050` in your browser.
 3. **Connection** tab:
    - Host: `db`
    - Port: `5432`
-   - Database: `odata_learn`
+   - Maintenance Database: `odata_learn`
    - Username: `cap_user`
    - Password: `cap_password`
 4. Click **Save**
@@ -164,15 +189,23 @@ Open `http://localhost:5050` in your browser.
 
 Expand: `learn-odata` → `Databases` → `odata_learn` → `Schemas` → `public` → `Tables`
 
-You will see tables named `catalog_Products`, `catalog_Categories`, `catalog_Orders`, etc.
-CAP namespaces the table names with the service name.
+You will see tables named `products_db_products`, `products_db_categories`,
+`products_db_orders`, `products_db_orderitems`.
+
+CAP derives the table name from the **data model namespace**, not the service name.
+The namespace in `db/schema.cds` is `products.db` — CAP replaces the dot with an
+underscore and lowercases everything, giving `products_db_` as the prefix.
+
+**ABAP analogy:** Like how SAP Dictionary tables use a naming convention based on
+the application component (e.g. `MARA`, `VBAK`) — the prefix encodes where the
+table belongs in the data model.
 
 **Run a query:**
 
-Right-click any table → **Query Tool**, then:
+Right-click `products_db_products` → **Query Tool**, then:
 
 ```sql
-SELECT * FROM "catalog_Products";
+SELECT * FROM products_db_products;
 ```
 
 You are looking at the actual rows that `GET /odata/v4/catalog/Products` returns.
@@ -181,10 +214,10 @@ and returns the result as JSON.
 
 You can also run:
 ```sql
-SELECT p."Name", p."Price", c."Name" AS "Category"
-FROM "catalog_Products" p
-JOIN "catalog_Categories" c ON p."Category_ID" = c."ID"
-ORDER BY p."Price" DESC;
+SELECT p.name, p.price, c.name AS category
+FROM products_db_products p
+JOIN products_db_categories c ON p.category_id = c.id
+ORDER BY p.price DESC;
 ```
 
 This is the same join that OData `$expand=Category` performs — just written in SQL
@@ -192,7 +225,7 @@ instead of a URL parameter.
 
 ---
 
-## Step 5 — Demonstrate Persistence
+## Step 6 — Demonstrate Persistence
 
 This is what in-memory SQLite cannot show.
 
