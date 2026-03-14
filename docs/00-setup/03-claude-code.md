@@ -20,17 +20,15 @@ That installs the `claude` command globally on your machine.
 
 ## First-Time Setup
 
-You'll need an Anthropic account and API key.
-
-1. Go to https://console.anthropic.com and sign up (or log in)
-2. Under **API Keys**, create a new key — copy it somewhere safe
-3. In your terminal:
+You'll need a Claude account (claude.ai). The first time you run Claude Code, it will
+open a browser window and ask you to log in and paste a confirmation code back into the
+terminal. No API key needed.
 
 ```bash
 claude
 ```
 
-The first time you run it, it will ask you to authenticate. Follow the prompts.
+Follow the prompts — it walks you through the authentication step by step.
 
 ---
 
