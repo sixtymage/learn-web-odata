@@ -114,6 +114,12 @@ git commit -m "Add product list to stage2-fetch"
 git push
 ```
 
+> Don't worry if the command line feels unfamiliar. VS Code has a built-in Git panel
+> (the branch icon in the left sidebar) that gives you a point-and-click interface for
+> all of the above — staging files, writing a commit message, and pushing — without
+> touching the terminal. The commands above are here so you understand what's happening
+> under the hood; day to day you may never need to type them.
+
 ---
 
 ## The Usual Workflow
