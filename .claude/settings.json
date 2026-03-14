@@ -29,10 +29,10 @@
       "Bash(npx *)",
       "Bash(node *)",
       "Bash(cds *)",
-      "Bash(docker compose*)"
+      "Bash(docker compose*)",
+      "Bash(git push*)"
     ],
     "deny": [
-      "Bash(git push*)",
       "Bash(git reset --hard*)",
       "Bash(rm -rf*)",
       "Bash(git branch -D*)"
