@@ -51,6 +51,22 @@ This is optional for the early stages but useful later. It includes:
 - Publisher should be **SAP**
 - Click **Install**
 
+### 3. Live Server
+
+This launches a local web server so you can open HTML files in your browser
+with a real URL (`http://localhost:...`) instead of a plain file path.
+
+This matters from Stage 2 onward — browsers block `fetch()` calls made from
+plain `file://` paths, so you need a local server to test network requests.
+
+- In the Extensions panel, search for: **Live Server**
+- Publisher should be **Ritwick Dey**
+- Click **Install**
+
+Once installed, right-click any `index.html` in the Explorer panel →
+**Open with Live Server**. It opens the file in your browser and auto-refreshes
+when you save changes.
+
 ---
 
 ## Useful VS Code Features
@@ -80,6 +96,8 @@ If you want to see a doc and the code side by side:
 ## Verify CDS Extension Is Working
 
 Open `src/backend/db/schema.cds` in VS Code.
+You can navigate there quickly with `Ctrl+P` — type `schema.cds` and press Enter.
+(This works for any file in the repo — faster than clicking through the Explorer.)
 
 You should see:
 - Keywords like `entity`, `String`, `Integer` highlighted in colour
