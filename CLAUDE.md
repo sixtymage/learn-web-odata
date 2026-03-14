@@ -42,7 +42,7 @@ she already knows what they're doing under the hood because she did it by hand f
 
 **The through-line:** A Products & Orders data domain — directly analogous to what she sees in SAP.
 
-### The Five Stages
+### The Seven Stages
 
 | Stage | Location | What She Learns |
 |---|---|---|
@@ -110,7 +110,7 @@ This is intentionally SAP-adjacent. A real SAP Materials Management module has t
 
 ## Teaching Notes
 
-- **If she asks "what is this repo teaching me?"** — give her the five-stage summary above.
+- **If she asks "what is this repo teaching me?"** — give her the seven-stage summary above.
 - **If she asks about a specific file** — explain it in terms of its role in the learning path.
 - **If she is stuck on a command** — check which stage she is in and point her to the right doc.
 - **If something is not working** — ask her what she sees in the browser console (F12 → Console tab).
