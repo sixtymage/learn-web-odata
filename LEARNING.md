@@ -37,11 +37,16 @@ you can ask it anything:
 
 Work through these in order. Each is short with exact commands.
 
-1. [`01-git-primer.md`](docs/00-setup/01-git-primer.md) — Git concepts (no DVCS in the ABAP world — this will be new)
-2. [`02-vscode-setup.md`](docs/00-setup/02-vscode-setup.md) — VS Code + SAP CDS extension + SAP Fiori Tools
-3. [`03-claude-code.md`](docs/00-setup/03-claude-code.md) — Install Claude Code, open this repo, try your first question
-4. [`04-node-setup.md`](docs/00-setup/04-node-setup.md) — Node.js and npm (the runtime the CAP backend uses)
-5. [`05-docker-setup.md`](docs/00-setup/05-docker-setup.md) — Docker Desktop (used in the final stage)
+1. [`01-git-primer.md`](docs/00-setup/01-git-primer.md) — Install Git, configure your name and email, learn the key concepts
+2. **Clone this repo** — once Git is installed, open a terminal and run:
+   ```bash
+   git clone https://github.com/sixtymage/learn-web-odata.git
+   cd learn-web-odata
+   ```
+3. [`02-vscode-setup.md`](docs/00-setup/02-vscode-setup.md) — Install VS Code, open the repo, add the SAP extensions
+4. [`04-node-setup.md`](docs/00-setup/04-node-setup.md) — Install Node.js and npm (required for Claude Code and the CAP backend)
+5. [`03-claude-code.md`](docs/00-setup/03-claude-code.md) — Install Claude Code, authenticate, open this repo, try your first question
+6. [`05-docker-setup.md`](docs/00-setup/05-docker-setup.md) — Docker Desktop (used in the final stage only — can leave this until then)
 
 #### Step 1 — Web Basics ([`docs/01-web-basics/`](docs/01-web-basics/) + [`src/frontend/stage1-basics/`](src/frontend/stage1-basics/))
 
@@ -96,11 +101,11 @@ Start here to understand what the browser actually is and does.
 
 ```
 docs/
-  00-setup/       Setup guides (Git, VS Code, Claude Code, Node.js, Docker)
-  01-web-basics/  HTTP, HTML, JavaScript, JSON
+  00-setup/          01-git-primer, 02-vscode-setup, 03-claude-code, 04-node-setup, 05-docker-setup
+  01-web-basics/     HTTP, HTML, JavaScript, JSON
   02-odata-concepts/ OData URL syntax and conventions
-  03-cap-intro/   What SAP CAP is and why it exists
-  04-sapui5-intro/ OpenUI5 and Fiori data binding
+  03-cap-intro/      What SAP CAP is and why it exists
+  04-sapui5-intro/   OpenUI5 and Fiori data binding
 
 src/
   backend/        SAP CAP service — the OData backend

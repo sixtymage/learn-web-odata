@@ -20,6 +20,37 @@ with auto-generated OData exposure.
 
 ---
 
+## Starting from Scratch?
+
+If you're reading this on GitHub and don't yet have any tools installed, start here.
+You can read this page and the setup docs directly in GitHub — no download needed yet.
+
+**Step 1 — Install Git**
+
+Git is the version control tool that lets you download this repo (and track your own changes).
+Install it from [https://git-scm.com/downloads](https://git-scm.com/downloads) — accept the defaults.
+
+For first-time configuration, see [docs/00-setup/01-git-primer.md](docs/00-setup/01-git-primer.md)
+(readable here on GitHub).
+
+**Step 2 — Clone this repo**
+
+Once Git is installed, open a terminal (Git Bash or Windows Terminal) and run:
+
+```bash
+git clone https://github.com/sixtymage/learn-web-odata.git
+cd learn-web-odata
+```
+
+This downloads the entire repo to your machine.
+
+**Step 3 — Follow LEARNING.md**
+
+Open [`LEARNING.md`](LEARNING.md) — it walks you through the rest of the setup
+(VS Code, Node.js, Claude Code, Docker) and then into the learning stages.
+
+---
+
 ## Stack
 
 | Layer | Technology | Notes |
