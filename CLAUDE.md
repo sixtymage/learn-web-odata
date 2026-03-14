@@ -58,8 +58,8 @@ she already knows what they're doing under the hood because she did it by hand f
 |---|---|
 | Git concepts | `docs/00-setup/01-git-primer.md` |
 | VS Code + SAP extensions | `docs/00-setup/02-vscode-setup.md` |
-| Claude Code install + usage | `docs/00-setup/03-claude-code.md` |
-| Node.js + npm | `docs/00-setup/04-node-setup.md` |
+| Node.js + npm | `docs/00-setup/03-node-setup.md` |
+| Claude Code install + usage | `docs/00-setup/04-claude-code.md` |
 | Docker Desktop | `docs/00-setup/05-docker-setup.md` |
 | HTTP, HTML, JavaScript, JSON | `docs/01-web-basics/README.md` |
 | OData concepts + URL syntax | `docs/02-odata-concepts/README.md` |
