@@ -58,7 +58,7 @@ Open [`LEARNING.md`](LEARNING.md) — it walks you through the rest of the setup
 | Backend | SAP CAP (Node.js) | CDS data model → OData service, automatic |
 | Frontend (stages 1–3) | Plain HTML + `fetch()` | No framework; exposes raw HTTP/OData |
 | Frontend (stage 4) | OpenUI5 (CDN) | The open-source Fiori framework; no build step |
-| Database (dev) | SQLite (CAP built-in) | Zero setup; recreated on each `cds watch` |
+| Database (dev) | SQLite (CAP built-in) | Zero setup; recreated on each run of the watch command |
 | Database (Docker) | PostgreSQL | Real three-tier setup in Stage 5 |
 
 ---
@@ -94,7 +94,7 @@ learn-web-odata/
 │   ├── 00-setup/            Git, VS Code, Claude Code, Node.js, Docker
 │   ├── 01-web-basics/       HTTP, HTML, JavaScript, JSON
 │   ├── 02-odata-concepts/   $filter, $select, $expand and friends
-│   ├── 03-cap-intro/        CDS models, service definitions, cds watch
+│   ├── 03-cap-intro/        CDS models, service definitions, the watch command
 │   └── 04-sapui5-intro/     ODataModel, data binding, Fiori context
 ├── src/
 │   ├── backend/             SAP CAP service
@@ -122,7 +122,7 @@ Once Claude Code is running in this directory, ask it anything:
 - *"Explain what `$expand` does and what the ABAP equivalent is"*
 - *"Walk me through stage3-odata/index.html line by line"*
 - *"Something's not working — here's what I see in the browser console..."*
-- *"What's actually happening between `cds watch` starting and my first fetch() call?"*
+- *"What's actually happening between `npm run watch` starting and my first fetch() call?"*
 
 See [`docs/00-setup/03-claude-code.md`](docs/00-setup/03-claude-code.md) for install instructions.
 

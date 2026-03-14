@@ -43,7 +43,7 @@ their relationships, and available operations.
 **ABAP analogy:** `$metadata` is like the WSDL for a web service, or the dictionary
 entry for a structure — it describes the shape of the data before you retrieve any.
 
-Open both in your browser once `cds watch` is running. Read the metadata XML.
+Open both in your browser once the watch command is running. Read the metadata XML.
 You'll recognise the entity names from `src/backend/db/schema.cds`.
 
 ---

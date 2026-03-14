@@ -84,7 +84,7 @@ npx serve src/frontend/stage2-fetch
 docker compose up
 
 # Check what OData endpoints are available
-# After `cds watch`, open in browser:
+# After `npm run watch`, open in browser:
 # http://localhost:4004/odata/v4/catalog
 # http://localhost:4004/odata/v4/catalog/$metadata
 ```

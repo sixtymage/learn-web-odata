@@ -230,7 +230,7 @@ This whole cycle happens in milliseconds.
 ## Exercise: Stage 1
 
 Open `src/frontend/stage1-basics/index.html` in your browser.
-(Right-click the file in VS Code Explorer → **Open with Live Server**, or just double-click the file.)
+(Right-click the file in VS Code Explorer → **Open with Live Server**, or just double-click the file in Windows explorer.)
 
 Read the code alongside the page. Notice:
 - The HTML structure that becomes what you see

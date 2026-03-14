@@ -73,7 +73,7 @@ when you save changes.
 
 ### Integrated Terminal
 
-You'll run commands (`cds watch`, `npm install`, etc.) from a terminal inside VS Code.
+You'll run commands (`npm run watch`, `npm install`, etc.) from a terminal inside VS Code.
 
 - **Terminal → New Terminal** (or `Ctrl+`\``)
 - This opens a terminal at the root of your repo — exactly where you need it

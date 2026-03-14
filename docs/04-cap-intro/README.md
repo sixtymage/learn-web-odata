@@ -104,7 +104,7 @@ npm install      # first time only
 npm run watch
 ```
 
-`cds watch` does three things:
+The watch command (`npm run watch`) does three things:
 1. Creates an in-memory SQLite database and runs the CDS schema against it (creates tables)
 2. Loads sample data from `db/data/` CSV files (if present)
 3. Starts an HTTP server on port 4004 and watches for file changes (auto-restarts on save)
@@ -211,5 +211,5 @@ This is the key design principle of CAP: environment-independent data model.
 
 ---
 
-*Ask Claude: "Explain exactly what happens between `cds watch` starting and the first*
+*Ask Claude: "Explain exactly what happens between `npm run watch` starting and the first*
 *fetch() request arriving at the Products endpoint."*

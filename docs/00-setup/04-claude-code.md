@@ -71,7 +71,7 @@ from ABAP Dictionary and CDS Views.
 ### While setting up:
 - *"Is Node.js installed correctly on my machine?"*
 - *"What does `npm install` actually do?"*
-- *"Explain what `cds watch` is doing when I run it"*
+- *"Explain what the watch command (`npm run watch`) is doing"*
 
 ### While reading HTML/JavaScript:
 - *"What is the DOM? How is it like a tree structure I might know from ABAP?"*
