@@ -71,7 +71,7 @@ Open [`LEARNING.md`](LEARNING.md) — it walks you through the rest of the setup
 |---|---|---|
 | Setup | `docs/00-setup/` | Git, VS Code + SAP extensions, Claude Code, Node.js, Docker |
 | Stage 1 | Open `stage1-basics/index.html` in browser | HTML, JavaScript, the DOM — client side, no network |
-| Stage 2 | `cds watch` then open `stage2-fetch/` | `fetch()`, async/await, live OData endpoint |
+| Stage 2 | `npm run watch` then open `stage2-fetch/` | `fetch()`, async/await, live OData endpoint |
 
 ### Weekend 2
 

@@ -60,7 +60,7 @@ Start here to understand what the browser actually is and does.
 
 #### Step 2 — Live Data with fetch() ([`src/frontend/stage2-fetch/`](src/frontend/stage2-fetch/))
 
-- Start the backend: `cd src/backend && npm install && cds watch`
+- Start the backend: `cd src/backend && npm install && npm run watch`
 - Open `http://localhost:4004` and explore what CAP generated
 - Read [`src/frontend/stage2-fetch/index.html`](src/frontend/stage2-fetch/index.html)
 - Update it (or ask Claude to walk you through it) to fetch live data

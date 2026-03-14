@@ -101,7 +101,7 @@ and the views or BAPIs that expose them to the outside world.
 ```bash
 cd src/backend
 npm install      # first time only
-cds watch
+npm run watch
 ```
 
 `cds watch` does three things:
