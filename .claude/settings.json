@@ -11,6 +11,7 @@
       "Bash(git restore *)",
       "Bash(git branch*)",
       "Bash(git stash*)",
+      "Bash(cd *)",
       "Bash(ls*)",
       "Bash(find *)",
       "Bash(mkdir *)",
