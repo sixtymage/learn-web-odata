@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git status *)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git add *)",
+      "Bash(git commit*)",
+      "Bash(git restore *)",
+      "Bash(git branch*)",
+      "Bash(git stash*)",
+      "Bash(ls*)",
+      "Bash(find *)",
+      "Bash(mkdir *)",
+      "Bash(npm install*)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(cds *)",
+      "Bash(docker compose*)"
+    ],
+    "deny": [
+      "Bash(git push*)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf*)",
+      "Bash(git branch -D*)"
+    ]
+  }
+}
