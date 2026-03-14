@@ -9,5 +9,13 @@
   },
   "features": {
     "serve_on_root": true
+  },
+  "server": {
+    "cors": [
+      {
+        "origin": "*",
+        "allowedHeaders": ["Content-Type", "Authorization", "x-csrf-token"]
+      }
+    ]
   }
 }

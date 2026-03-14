@@ -99,7 +99,7 @@
            ===================================================== -->
       <Table
           id="productTable"
-          items="{path: '/Products', parameters: {$count: true}}"
+          items="{path: '/Products', parameters: {$count: true, $$operationMode: 'Server'}}"
           growing="true"
           growingThreshold="8">
 

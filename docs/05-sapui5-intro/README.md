@@ -47,7 +47,7 @@ In Stage 5, we load OpenUI5 from a CDN (Content Delivery Network) — no build s
 ```html
 <script
   id="sap-ui-bootstrap"
-  src="https://ui5.sap.com/1.120.17/resources/sap-ui-core.js"
+  src="https://sdk.openui5.org/1.120/resources/sap-ui-core.js"
   data-sap-ui-theme="sap_horizon"
   data-sap-ui-libs="sap.m,sap.ui.layout,sap.ui.table"
   data-sap-ui-compatVersion="edge"
@@ -56,6 +56,10 @@ In Stage 5, we load OpenUI5 from a CDN (Content Delivery Network) — no build s
   data-sap-ui-resourceRoots='{"stage5": "./"}'
 ></script>
 ```
+
+The URL uses `sdk.openui5.org` (the open-source OpenUI5 CDN) with `1.120` as a version
+shorthand — this always resolves to the latest available `1.120.x` patch, so it won't 404
+if a specific patch hasn't been published yet.
 
 This one `<script>` tag:
 - Loads the OpenUI5 framework (core + sap.m controls library)
@@ -73,8 +77,8 @@ The `ODataModel` is the bridge between your UI and the OData service.
 ```javascript
 const model = new ODataModel({
     serviceUrl: "http://localhost:4004/odata/v4/catalog/",
-    synchronizationMode: "None",
-    autoExpandSelect: true     // Automatically adds $select for used properties
+    autoExpandSelect: true,  // Automatically adds $select for used properties
+    groupId: "$direct"       // Send individual GET requests, not batched via $batch
 });
 
 // Set it on the App — all child controls inherit it
@@ -87,6 +91,20 @@ The model handles:
 - Fetching data when controls need it
 - Assembling query options (`$filter`, `$orderby`, etc.) from binding parameters
 - Updating data when the user makes changes
+
+**`groupId: "$direct"` — why it's needed here:**
+By default, ODataModel v4 batches all requests into a single `POST $batch` call.
+This is efficient in production but has two drawbacks in this learning setup:
+1. The individual OData URLs (`?$filter=...`, `?$top=8`) are hidden inside the batch envelope — you can't see them in the Network tab
+2. The `$batch` POST triggers a CORS preflight that CAP's dev server doesn't pass by default
+
+Setting `groupId: "$direct"` sends each request as a plain GET, making the URLs
+visible exactly as you'd expect from Stage 3.
+
+**Note on CORS:** The backend (`src/backend/server.js`) is configured to allow
+cross-origin requests from the `npx serve` dev server on port 3000. In a real SAP BTP
+deployment, the Fiori app and the CAP service are served from the same origin, so CORS
+does not arise.
 
 **ABAP analogy:** The ODataModel is like a persistent RFC connection with a query cache.
 The framework talks to the service; you just tell controls what data they should show.

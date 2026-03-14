@@ -63,8 +63,11 @@ sap.ui.define([
   // ----------------------------------------------------------
   const model = new ODataModel({
     serviceUrl: "http://localhost:4004/odata/v4/catalog/",
-    synchronizationMode: "None",
-    autoExpandSelect: true     // Automatically adds $select for used properties
+    autoExpandSelect: true,    // Automatically adds $select for used properties
+    groupId: "$direct"         // Send requests as individual GETs, not batched via $batch.
+                               // $batch triggers a CORS preflight for x-csrf-token which
+                               // CAP's dev server blocks. $direct also makes each OData
+                               // URL visible in the Network tab — the point of this exercise.
   });
 
   // ----------------------------------------------------------
@@ -151,7 +154,7 @@ sap.ui.define([
         // Category_ID is the foreign key. Without $expand, we just show the ID.
         // The expandedCategoryText binding below uses $expand=Category.
         new Text({ text: "{Category_ID}" }),
-        new Text({ text: "{= '$' + odata.Number($v{Price}, 2) }" }).addStyleClass("sapUiSmallMarginEnd"),
+        new Text({ text: "{= '$' + odata.Number(${Price}, 2) }" }).addStyleClass("sapUiSmallMarginEnd"),
         // ObjectStatus shows stock with colour coding
         new ObjectStatus({
           text: {
@@ -175,7 +178,8 @@ sap.ui.define([
     }),
     // Request the first page immediately
     parameters: {
-      $count: true   // Request a total count so the footer can show it
+      $count: true,          // Request a total count so the footer can show it
+      $$operationMode: "Server"  // Required for filter() and sort() to work
     }
   });
 
@@ -270,17 +274,14 @@ sap.ui.define([
             wrap: "Wrap",
             items: [
               new VBox({
-                items: [new Label({ text: "Name" }), nameInput],
-                class: "sapUiSmallMarginEnd sapUiSmallMarginBottom"
-              }),
+                items: [new Label({ text: "Name" }), nameInput]
+              }).addStyleClass("sapUiSmallMarginEnd sapUiSmallMarginBottom"),
               new VBox({
-                items: [new Label({ text: "Price Condition" }), priceOperatorSelect],
-                class: "sapUiSmallMarginEnd sapUiSmallMarginBottom"
-              }),
+                items: [new Label({ text: "Price Condition" }), priceOperatorSelect]
+              }).addStyleClass("sapUiSmallMarginEnd sapUiSmallMarginBottom"),
               new VBox({
-                items: [new Label({ text: "Value" }), priceInput],
-                class: "sapUiSmallMarginEnd sapUiSmallMarginBottom"
-              }),
+                items: [new Label({ text: "Value" }), priceInput]
+              }).addStyleClass("sapUiSmallMarginEnd sapUiSmallMarginBottom"),
               new VBox({
                 items: [
                   new Label({ text: "\u00a0" }), // spacer label

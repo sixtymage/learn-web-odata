@@ -26,8 +26,9 @@ sap.ui.define([
   // so it can be shared across multiple views in a larger app.
   const model = new ODataModel({
     serviceUrl: "http://localhost:4004/odata/v4/catalog/",
-    synchronizationMode: "None",
-    autoExpandSelect: true
+    autoExpandSelect: true,
+    groupId: "$direct"   // Send individual GET requests instead of $batch,
+                         // so requests are visible in the Network tab
   });
 
   // XMLView.create() loads view/Main.view.xml.
