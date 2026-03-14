@@ -65,16 +65,16 @@ Open [`LEARNING.md`](LEARNING.md) — it walks you through the rest of the setup
 
 ## Learning Path
 
-| Step | What you do | What you learn |
-|---|---|---|
-| Setup | `docs/00-setup/` | Git, VS Code + SAP extensions, Claude Code, Node.js, Docker |
-| Stage 1 | Open `stage1-basics/index.html` in browser | HTML, JavaScript, the DOM — client side, no network |
-| Stage 2 | `npm run watch` then open `stage2-fetch/` | `fetch()`, async/await, live OData endpoint |
-| Stage 3 | Open `stage3-odata/` with backend running | `$filter`, `$select`, `$orderby`, `$expand` — by hand |
-| Stage 4 | Edit `srv/catalog.js` | CAP custom handlers — server-side JS, git commit workflow |
-| Stage 5 | Open `stage5-openui5/` | ODataModel, data binding — the library does what you just wrote |
-| Stage 6 | Open `stage6-openui5-mvc/` | Same app with XML views + MVC — the real Fiori structure |
-| Stage 7 | `docker compose up` | Three-tier architecture: browser → CAP → PostgreSQL |
+| Step | What you learn |
+|---|---|
+| Setup | Git, VS Code + SAP extensions, Claude Code, Node.js, Docker |
+| Stage 1 | HTML, JavaScript, the DOM — client side, no network |
+| Stage 2 | `fetch()`, async/await, live OData endpoint |
+| Stage 3 | `$filter`, `$select`, `$orderby`, `$expand` — by hand |
+| Stage 4 | CAP custom handlers — server-side JS, git commit workflow |
+| Stage 5 | ODataModel, data binding — the library does what you just wrote |
+| Stage 6 | Same app with XML views + MVC — the real Fiori structure |
+| Stage 7 | Three-tier architecture: browser → CAP → PostgreSQL |
 
 **Start here: [`LEARNING.md`](LEARNING.md)**
 
