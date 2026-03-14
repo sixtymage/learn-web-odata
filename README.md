@@ -54,29 +54,6 @@ with auto-generated OData exposure.
 
 ---
 
-## Quick Start
-
-```bash
-# 1. Install the SAP CAP CLI (once)
-npm install -g @sap/cds-dk
-
-# 2. Start the backend
-cd src/backend
-npm install
-cds watch
-# → OData service running at http://localhost:4004
-
-# 3. Open a frontend stage — no build step
-# Right-click index.html in VS Code → Open with Live Server
-# OR serve locally:
-npx serve src/frontend/stage2-fetch
-
-# 4. Full three-tier setup (Stage 5)
-docker compose up
-```
-
----
-
 ## Repository Structure
 
 ```
