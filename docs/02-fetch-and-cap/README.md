@@ -65,7 +65,7 @@ it on demand. Leave this terminal running alongside your `npm run watch` termina
 When you run Stage 2, three separate things are running at once:
 
 ```
-┌──────────────────────┐                    ┌──────────────────────┐
+┌──────────────────────┐                     ┌──────────────────────┐
 │                      │  1. GET index.html  │                      │
 │                      │ ──────────────────► │   npx serve          │
 │   Your Browser       │ ◄────────────────── │   localhost:3000     │
