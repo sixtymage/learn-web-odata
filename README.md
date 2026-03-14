@@ -57,26 +57,19 @@ Open [`LEARNING.md`](LEARNING.md) — it walks you through the rest of the setup
 |---|---|---|
 | Backend | SAP CAP (Node.js) | CDS data model → OData service, automatic |
 | Frontend (stages 1–3) | Plain HTML + `fetch()` | No framework; exposes raw HTTP/OData |
-| Frontend (stage 4) | OpenUI5 (CDN) | The open-source Fiori framework; no build step |
+| Frontend (stages 5–6) | OpenUI5 (CDN) | The open-source Fiori framework; no build step |
 | Database (dev) | SQLite (CAP built-in) | Zero setup; recreated on each run of the watch command |
-| Database (Docker) | PostgreSQL | Real three-tier setup in Stage 5 |
+| Database (Docker) | PostgreSQL | Real three-tier setup in Stage 7 |
 
 ---
 
 ## Learning Path
-
-### Weekend 1
 
 | Step | What you do | What you learn |
 |---|---|---|
 | Setup | `docs/00-setup/` | Git, VS Code + SAP extensions, Claude Code, Node.js, Docker |
 | Stage 1 | Open `stage1-basics/index.html` in browser | HTML, JavaScript, the DOM — client side, no network |
 | Stage 2 | `npm run watch` then open `stage2-fetch/` | `fetch()`, async/await, live OData endpoint |
-
-### Weekend 2
-
-| Step | What you do | What you learn |
-|---|---|---|
 | Stage 3 | Open `stage3-odata/` with backend running | `$filter`, `$select`, `$orderby`, `$expand` — by hand |
 | Stage 4 | Edit `srv/catalog.js` | CAP custom handlers — server-side JS, git commit workflow |
 | Stage 5 | Open `stage5-openui5/` | ODataModel, data binding — the library does what you just wrote |
@@ -95,11 +88,12 @@ learn-web-odata/
 ├── docs/
 │   ├── 00-setup/            Git, VS Code, Claude Code, Node.js, Docker
 │   ├── 01-web-basics/       HTTP, HTML, JavaScript, JSON
-│   ├── 02-odata-concepts/   $filter, $select, $expand and friends
-│   ├── 03-cap-intro/        CDS models, service definitions, the watch command
-│   ├── 04-cap-intro/        CAP custom handlers, server-side JS
+│   ├── 02-fetch-and-cap/    fetch(), async/await, CAP backend
+│   ├── 03-odata-concepts/   $filter, $select, $expand and friends
+│   ├── 04-cap-intro/        CDS models, service definitions, custom handlers
 │   ├── 05-sapui5-intro/     ODataModel, data binding, Fiori context
-│   └── 06-openui5-mvc/      XML views, MVC structure, real Fiori pattern
+│   ├── 06-openui5-mvc/      XML views, MVC structure, real Fiori pattern
+│   └── 07-docker-postgres/  Docker, PostgreSQL, three-tier architecture
 ├── src/
 │   ├── backend/             SAP CAP service
 │   │   ├── db/schema.cds    Products, Categories, Orders, OrderItems
@@ -129,7 +123,7 @@ Once Claude Code is running in this directory, ask it anything:
 - *"Something's not working — here's what I see in the browser console..."*
 - *"What's actually happening between `npm run watch` starting and my first fetch() call?"*
 
-See [`docs/00-setup/03-claude-code.md`](docs/00-setup/03-claude-code.md) for install instructions.
+See [`docs/00-setup/04-claude-code.md`](docs/00-setup/04-claude-code.md) for install instructions.
 
 ---
 

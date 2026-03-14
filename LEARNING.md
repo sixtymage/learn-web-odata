@@ -16,7 +16,7 @@ You have two companions as you work through this:
 
 ### Using Claude Code
 
-Once Claude Code is running in this repository (see [`docs/00-setup/03-claude-code.md`](docs/00-setup/03-claude-code.md)),
+Once Claude Code is running in this repository (see [`docs/00-setup/04-claude-code.md`](docs/00-setup/04-claude-code.md)),
 you can ask it anything:
 
 - *"Explain what fetch() is doing in stage2-fetch/index.html"*
@@ -31,8 +31,6 @@ you can ask it anything:
 
 ## The Learning Path
 
-### Weekend 1
-
 #### Step 0 — Setup ([`docs/00-setup/`](docs/00-setup/))
 
 Work through these in order. Each is short with exact commands.
@@ -44,8 +42,8 @@ Work through these in order. Each is short with exact commands.
    cd learn-web-odata
    ```
 3. [`02-vscode-setup.md`](docs/00-setup/02-vscode-setup.md) — Install VS Code, open the repo, add the SAP extensions
-4. [`04-node-setup.md`](docs/00-setup/04-node-setup.md) — Install Node.js and npm (required for Claude Code and the CAP backend)
-5. [`03-claude-code.md`](docs/00-setup/03-claude-code.md) — Install Claude Code, authenticate, open this repo, try your first question
+4. [`03-node-setup.md`](docs/00-setup/03-node-setup.md) — Install Node.js and npm (required for Claude Code and the CAP backend)
+5. [`04-claude-code.md`](docs/00-setup/04-claude-code.md) — Install Claude Code, authenticate, open this repo, try your first question
 6. [`05-docker-setup.md`](docs/00-setup/05-docker-setup.md) — Docker Desktop (used in the final stage only — can leave this until then)
 
 #### Step 1 — Web Basics ([`docs/01-web-basics/`](docs/01-web-basics/) + [`src/frontend/stage1-basics/`](src/frontend/stage1-basics/))
@@ -67,13 +65,9 @@ Start here to understand what the browser actually is and does.
 
 **Goal:** Product list is now fetched from a real OData endpoint.
 
----
+#### Step 3 — OData Queries ([`docs/03-odata-concepts/`](docs/03-odata-concepts/) + [`src/frontend/stage3-odata/`](src/frontend/stage3-odata/))
 
-### Weekend 2
-
-#### Step 3 — OData Queries ([`docs/02-odata-concepts/`](docs/02-odata-concepts/) + [`src/frontend/stage3-odata/`](src/frontend/stage3-odata/))
-
-- Read [`docs/02-odata-concepts/README.md`](docs/02-odata-concepts/README.md)
+- Read [`docs/03-odata-concepts/README.md`](docs/03-odata-concepts/README.md)
 - Open [`src/frontend/stage3-odata/index.html`](src/frontend/stage3-odata/index.html)
 - Use the filter controls to construct and fire OData queries by hand
 
@@ -103,9 +97,9 @@ Start here to understand what the browser actually is and does.
 
 **Goal:** You understand the MVC structure used in all real Fiori apps.
 
-#### Step 7 — Docker / Three-Tier ([`docs/00-setup/05-docker-setup.md`](docs/00-setup/05-docker-setup.md))
+#### Step 7 — Docker / Three-Tier ([`docs/07-docker-postgres/`](docs/07-docker-postgres/))
 
-- Read the Docker doc
+- Read [`docs/07-docker-postgres/README.md`](docs/07-docker-postgres/README.md)
 - Run `docker compose up`
 - Browser → CAP service → PostgreSQL: the production shape
 
@@ -117,13 +111,14 @@ Start here to understand what the browser actually is and does.
 
 ```
 docs/
-  00-setup/          01-git-primer, 02-vscode-setup, 03-claude-code, 04-node-setup, 05-docker-setup
-  01-web-basics/     HTTP, HTML, JavaScript, JSON
-  02-odata-concepts/ OData URL syntax and conventions
-  03-odata-concepts/ OData URL syntax and query options
-  04-cap-intro/      CAP custom handlers and server-side JS
-  05-sapui5-intro/   OpenUI5 and Fiori data binding
-  06-openui5-mvc/    XML views and MVC structure
+  00-setup/           01-git-primer, 02-vscode-setup, 03-node-setup, 04-claude-code, 05-docker-setup
+  01-web-basics/      HTTP, HTML, JavaScript, JSON
+  02-fetch-and-cap/   fetch(), async/await, CAP backend
+  03-odata-concepts/  OData URL syntax and query options
+  04-cap-intro/       CDS models, service definitions, custom handlers
+  05-sapui5-intro/    OpenUI5 and Fiori data binding
+  06-openui5-mvc/     XML views and MVC structure
+  07-docker-postgres/ Docker, PostgreSQL, three-tier architecture
 
 src/
   backend/        SAP CAP service — the OData backend
