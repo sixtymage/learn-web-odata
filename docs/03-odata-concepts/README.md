@@ -28,23 +28,26 @@ and what CAP exposes by default.
 Every OData service has two fundamental endpoints:
 
 ### Service Root
-```
-GET http://localhost:4004/odata/v4/catalog
-```
+
+If `npm run watch` is still running from Stage 2, you can open this right now:
+
+[http://localhost:4004/odata/v4/catalog](http://localhost:4004/odata/v4/catalog)
+
 Returns a list of available entity sets (like a table of contents).
 
 ### $metadata
-```
-GET http://localhost:4004/odata/v4/catalog/$metadata
-```
+
+[http://localhost:4004/odata/v4/catalog/$metadata](http://localhost:4004/odata/v4/catalog/$metadata)
+
 Returns the full service description in XML — all entity types, their properties,
 their relationships, and available operations.
 
 **ABAP analogy:** `$metadata` is like the WSDL for a web service, or the dictionary
 entry for a structure — it describes the shape of the data before you retrieve any.
 
-Open both in your browser once the watch command is running. Read the metadata XML.
-You'll recognise the entity names from `src/backend/db/schema.cds`.
+Open both and read them. In the metadata XML you'll recognise the entity names
+from `src/backend/db/schema.cds` — this is CAP declaring to the outside world
+exactly what it is serving.
 
 ---
 
