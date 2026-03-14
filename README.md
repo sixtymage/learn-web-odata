@@ -38,16 +38,16 @@ with auto-generated OData exposure.
 
 | Step | What you do | What you learn |
 |---|---|---|
-| Setup | [`docs/00-setup/`](docs/00-setup/) | Git, VS Code + SAP extensions, Claude Code, Node.js, Docker |
-| Stage 1 | Open [`stage1-basics/index.html`](src/frontend/stage1-basics/index.html) in browser | HTML, JavaScript, the DOM — client side, no network |
-| Stage 2 | `cds watch` then open [`stage2-fetch/`](src/frontend/stage2-fetch/) | `fetch()`, async/await, live OData endpoint |
+| Setup | `docs/00-setup/` | Git, VS Code + SAP extensions, Claude Code, Node.js, Docker |
+| Stage 1 | Open `stage1-basics/index.html` in browser | HTML, JavaScript, the DOM — client side, no network |
+| Stage 2 | `cds watch` then open `stage2-fetch/` | `fetch()`, async/await, live OData endpoint |
 
 ### Weekend 2
 
 | Step | What you do | What you learn |
 |---|---|---|
-| Stage 3 | Open [`stage3-odata/`](src/frontend/stage3-odata/) with backend running | `$filter`, `$select`, `$orderby`, `$expand` — by hand |
-| Stage 4 | Open [`stage4-openui5/`](src/frontend/stage4-openui5/) | ODataModel, data binding — the library does what you just wrote |
+| Stage 3 | Open `stage3-odata/` with backend running | `$filter`, `$select`, `$orderby`, `$expand` — by hand |
+| Stage 4 | Open `stage4-openui5/` | ODataModel, data binding — the library does what you just wrote |
 | Stage 5 | `docker compose up` | Three-tier architecture: browser → CAP → PostgreSQL |
 
 **Start here: [`LEARNING.md`](LEARNING.md)**

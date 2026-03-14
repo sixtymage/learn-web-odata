@@ -16,7 +16,7 @@ You have two companions as you work through this:
 
 ### Using Claude Code
 
-Once Claude Code is running in this repository (see `docs/00-setup/03-claude-code.md`),
+Once Claude Code is running in this repository (see [`docs/00-setup/03-claude-code.md`](docs/00-setup/03-claude-code.md)),
 you can ask it anything:
 
 - *"Explain what fetch() is doing in stage2-fetch/index.html"*
@@ -33,31 +33,31 @@ you can ask it anything:
 
 ### Weekend 1
 
-#### Step 0 — Setup (`docs/00-setup/`)
+#### Step 0 — Setup ([`docs/00-setup/`](docs/00-setup/))
 
 Work through these in order. Each is short with exact commands.
 
-1. `01-git-primer.md` — Git concepts (no DVCS in the ABAP world — this will be new)
-2. `02-vscode-setup.md` — VS Code + SAP CDS extension + SAP Fiori Tools
-3. `03-claude-code.md` — Install Claude Code, open this repo, try your first question
-4. `04-node-setup.md` — Node.js and npm (the runtime the CAP backend uses)
-5. `05-docker-setup.md` — Docker Desktop (used in the final stage)
+1. [`01-git-primer.md`](docs/00-setup/01-git-primer.md) — Git concepts (no DVCS in the ABAP world — this will be new)
+2. [`02-vscode-setup.md`](docs/00-setup/02-vscode-setup.md) — VS Code + SAP CDS extension + SAP Fiori Tools
+3. [`03-claude-code.md`](docs/00-setup/03-claude-code.md) — Install Claude Code, open this repo, try your first question
+4. [`04-node-setup.md`](docs/00-setup/04-node-setup.md) — Node.js and npm (the runtime the CAP backend uses)
+5. [`05-docker-setup.md`](docs/00-setup/05-docker-setup.md) — Docker Desktop (used in the final stage)
 
-#### Step 1 — Web Basics (`docs/01-web-basics/` + `src/frontend/stage1-basics/`)
+#### Step 1 — Web Basics ([`docs/01-web-basics/`](docs/01-web-basics/) + [`src/frontend/stage1-basics/`](src/frontend/stage1-basics/))
 
 Start here to understand what the browser actually is and does.
 
-- Read `docs/01-web-basics/README.md`
-- Open `src/frontend/stage1-basics/index.html` in your browser
+- Read [`docs/01-web-basics/README.md`](docs/01-web-basics/README.md)
+- Open [`src/frontend/stage1-basics/index.html`](src/frontend/stage1-basics/index.html) in your browser
 - Read the code. Ask Claude to explain anything that isn't clear.
 
 **Goal:** Render a hardcoded product list in the browser. No network calls yet.
 
-#### Step 2 — Live Data with fetch() (`src/frontend/stage2-fetch/`)
+#### Step 2 — Live Data with fetch() ([`src/frontend/stage2-fetch/`](src/frontend/stage2-fetch/))
 
 - Start the backend: `cd src/backend && npm install && cds watch`
 - Open `http://localhost:4004` and explore what CAP generated
-- Read `src/frontend/stage2-fetch/index.html`
+- Read [`src/frontend/stage2-fetch/index.html`](src/frontend/stage2-fetch/index.html)
 - Update it (or ask Claude to walk you through it) to fetch live data
 
 **Goal:** Product list is now fetched from a real OData endpoint.
@@ -66,23 +66,23 @@ Start here to understand what the browser actually is and does.
 
 ### Weekend 2
 
-#### Step 3 — OData Queries (`docs/02-odata-concepts/` + `src/frontend/stage3-odata/`)
+#### Step 3 — OData Queries ([`docs/02-odata-concepts/`](docs/02-odata-concepts/) + [`src/frontend/stage3-odata/`](src/frontend/stage3-odata/))
 
-- Read `docs/02-odata-concepts/README.md`
-- Open `src/frontend/stage3-odata/index.html`
+- Read [`docs/02-odata-concepts/README.md`](docs/02-odata-concepts/README.md)
+- Open [`src/frontend/stage3-odata/index.html`](src/frontend/stage3-odata/index.html)
 - Use the filter controls to construct and fire OData queries by hand
 
 **Goal:** You know exactly what `$filter`, `$select`, `$expand` do at the URL level.
 
-#### Step 4 — OpenUI5 (`docs/04-sapui5-intro/` + `src/frontend/stage4-openui5/`)
+#### Step 4 — OpenUI5 ([`docs/04-sapui5-intro/`](docs/04-sapui5-intro/) + [`src/frontend/stage4-openui5/`](src/frontend/stage4-openui5/))
 
-- Read `docs/04-sapui5-intro/README.md`
-- Open `src/frontend/stage4-openui5/index.html`
+- Read [`docs/04-sapui5-intro/README.md`](docs/04-sapui5-intro/README.md)
+- Open [`src/frontend/stage4-openui5/index.html`](src/frontend/stage4-openui5/index.html)
 - See how ODataModel binding replaces the manual fetch() you wrote
 
 **Goal:** You understand what the Fiori framework is doing for you — because you did it first.
 
-#### Step 5 — Docker / Three-Tier (`docs/00-setup/05-docker-setup.md`)
+#### Step 5 — Docker / Three-Tier ([`docs/00-setup/05-docker-setup.md`](docs/00-setup/05-docker-setup.md))
 
 - Read the Docker doc
 - Run `docker compose up`
