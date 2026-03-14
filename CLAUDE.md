@@ -62,9 +62,10 @@ she already knows what they're doing under the hood because she did it by hand f
 | Claude Code install + usage | `docs/00-setup/04-claude-code.md` |
 | Docker Desktop | `docs/00-setup/05-docker-setup.md` |
 | HTTP, HTML, JavaScript, JSON | `docs/01-web-basics/README.md` |
-| OData concepts + URL syntax | `docs/02-odata-concepts/README.md` |
-| SAP CAP introduction | `docs/03-cap-intro/README.md` |
-| OpenUI5 + data binding | `docs/04-sapui5-intro/README.md` |
+| fetch(), async/await, CAP backend | `docs/02-fetch-and-cap/README.md` |
+| OData concepts + URL syntax | `docs/03-odata-concepts/README.md` |
+| SAP CAP introduction | `docs/04-cap-intro/README.md` |
+| OpenUI5 + data binding | `docs/05-sapui5-intro/README.md` |
 
 ---
 
@@ -72,7 +73,7 @@ she already knows what they're doing under the hood because she did it by hand f
 
 ```bash
 # Start the CAP backend (dev mode, SQLite, auto-reload on save)
-cd src/backend && npm install && cds watch
+cd src/backend && npm install && npm run watch
 
 # Open a frontend stage — no build step, just open in the browser
 # Windows: right-click index.html → Open with → Chrome/Edge
