@@ -42,6 +42,18 @@ git config --global --list
 
 You only need to do this once per machine.
 
+### Line Endings (Windows only)
+
+Windows traditionally uses CR+LF (`\r\n`) to end lines in text files. Linux and macOS use
+LF (`\n`) only. This causes noise in diffs and occasional tool failures when a repo is shared
+across platforms.
+
+This repo's `.gitattributes` file instructs Git to store and check out all text files with
+LF endings, regardless of your OS. VS Code and all the tools in this stack handle LF correctly
+on Windows — you won't notice the difference, but it prevents a class of subtle problems.
+
+You don't need to configure anything. It's handled automatically.
+
 ---
 
 ## The Core Difference: Distributed vs. Centralized

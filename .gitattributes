@@ -1,0 +1,3 @@
+# Enforce LF line endings for all text files, on all platforms.
+# VS Code, Node.js, and modern Windows tools all handle LF correctly.
+* text=auto eol=lf
