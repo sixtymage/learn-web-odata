@@ -35,7 +35,7 @@ For first-time configuration, see [docs/00-setup/01-git-primer.md](docs/00-setup
 
 **Step 2 — Clone this repo**
 
-Once Git is installed, open a terminal (Git Bash or Windows Terminal) and run:
+Once Git is installed, open a terminal (Git Bash or Windows Terminal) to a folder where you'd like to keep source code and run:
 
 ```bash
 git clone https://github.com/sixtymage/learn-web-odata.git
