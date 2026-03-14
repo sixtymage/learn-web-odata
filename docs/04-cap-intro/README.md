@@ -190,16 +190,18 @@ The handler already added to `catalog.js` looks like this:
 ```javascript
 this.before("READ", Products, (req) => {
     const BLOCKED = ["fuck", "shit", "bastard"];
-    const query = JSON.stringify(req.query).toLowerCase();
-    const found = BLOCKED.find((word) => query.includes(word));
+    const rawParams = JSON.stringify(req._.query || {}).toLowerCase();
+    const found = BLOCKED.find((word) => rawParams.includes(word));
     if (found) {
         req.error(400, "That search term is not permitted.");
     }
 });
 ```
 
-`req.query` is the parsed OData query in CAP's internal format. Stringifying it
-lets us scan the entire query — filter values, field names, search terms — in one pass.
+`req._.query` is the raw OData query params from the HTTP request — the `$filter`,
+`$select`, `$orderby` etc. as plain strings, before CAP parses them into its internal
+format. Stringifying it lets us scan the entire query string, including any filter values,
+in one pass.
 
 `req.error(400, "...")` sends an HTTP 400 response to the caller and stops all
 further processing. The database is never queried.
