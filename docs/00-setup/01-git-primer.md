@@ -165,7 +165,7 @@ git diff --staged            # Show staged (add-ed) changes
 
 ## What This Repo Already Has
 
-The repo was set up with an initial commit. You can see it:
+The repo has a number of commits that were made in the course of creating it and proving all the exercises work :). Use the following command to see them:
 
 ```bash
 git log --oneline
