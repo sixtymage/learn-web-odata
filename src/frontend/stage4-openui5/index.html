@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+  STAGE 4: OpenUI5 ODataModel + Data Binding
+  ==========================================
+  The manual fetch() is gone. OpenUI5's ODataModel handles all
+  communication with the OData service. Data binding connects
+  UI controls directly to the service data.
+
+  What this page demonstrates:
+    - Loading OpenUI5 from CDN (no build step)
+    - Creating an ODataModel pointing at the CAP service
+    - Binding a sap.m.Table to the /Products entity set
+    - Filter bar that constructs $filter parameters automatically
+    - Sorting by clicking column headers (assembles $orderby)
+    - Automatic paging ($top/$skip via growing list)
+
+  Open DevTools (F12 → Network) and watch the requests.
+  They look exactly like the URLs you built by hand in Stage 3.
+
+  ABAP analogy: This is like having the ABAP framework handle
+  your SELECT statements based on UI element declarations,
+  rather than writing the SELECT yourself.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 4 — OpenUI5 ODataModel</title>
+  <style>
+    body { margin: 0; }
+    .stage-banner {
+      background: #0a6ed1;
+      color: white;
+      padding: 8px 16px;
+      font-family: Arial, sans-serif;
+      font-size: 0.85em;
+    }
+    .note {
+      font-family: Arial, sans-serif;
+      background: #f0f7ff;
+      border-left: 4px solid #0a6ed1;
+      padding: 12px 16px;
+      margin: 16px;
+      font-size: 0.875em;
+      line-height: 1.5;
+    }
+    #network-hint {
+      font-family: monospace;
+      font-size: 0.8em;
+      background: #1e1e1e;
+      color: #9cdcfe;
+      padding: 8px 16px;
+      margin: 0 16px 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stage-banner">
+    <strong>Stage 4 of 4</strong> — OpenUI5 ODataModel + Data Binding
+  </div>
+
+  <div class="note">
+    <strong>Compare to Stage 2 and Stage 3:</strong> There is no fetch() call in this page.
+    The ODataModel reads the service metadata, then fetches data automatically when the
+    table binding is activated. The filter bar assembles <code>$filter</code> parameters;
+    column sort assembles <code>$orderby</code>; the "More" button uses <code>$skip</code>.
+    Open DevTools (F12 → Network tab) to see the exact URLs being fired.
+  </div>
+
+  <div id="network-hint">
+    Watching: GET /odata/v4/catalog/$metadata — then — GET /odata/v4/catalog/Products?...
+  </div>
+
+  <!--
+    This div is the mount point for the OpenUI5 application.
+    OpenUI5 will render its controls inside here.
+  -->
+  <div id="content" style="margin: 0 16px;"></div>
+
+  <!--
+    LOADING OPENUI5 FROM CDN
+    =========================
+    The data-sap-ui-* attributes configure the framework:
+
+    - theme="sap_horizon"   → SAP's current Fiori design theme
+    - libs="sap.m"          → Load the "sap.m" mobile-first controls library
+                              (m = mobile, but used for all Fiori apps)
+    - onInit               → Which JavaScript module to run after OpenUI5 loads
+    - resourceRoots         → Map module names to folder paths
+    - async="true"          → Load asynchronously (better performance)
+
+    This one <script> tag loads hundreds of UI controls, the ODataModel,
+    routing, i18n, and everything else OpenUI5 provides.
+  -->
+  <script
+    id="sap-ui-bootstrap"
+    src="https://ui5.sap.com/1.120.17/resources/sap-ui-core.js"
+    data-sap-ui-theme="sap_horizon"
+    data-sap-ui-libs="sap.m,sap.ui.layout,sap.ui.table"
+    data-sap-ui-compatVersion="edge"
+    data-sap-ui-async="true"
+    data-sap-ui-onInit="module:stage4/App"
+    data-sap-ui-resourceRoots='{"stage4": "./"}'
+  ></script>
+
+</body>
+</html>

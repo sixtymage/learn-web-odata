@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!--
+  STAGE 2: fetch() Against the Live OData Endpoint
+  =================================================
+  The hardcoded array is gone. Data now comes from the CAP backend.
+
+  BEFORE OPENING THIS PAGE:
+    cd src/backend
+    npm install    (first time only)
+    cds watch
+
+  Then open this file in the browser. The simplest way:
+    npx serve src/frontend/stage2-fetch
+  (serving avoids a browser restriction on fetch() from file:// URLs)
+
+  What changed from Stage 1:
+    - The products[] array is removed
+    - renderProducts() is the same function (untouched)
+    - A new loadProducts() function uses fetch() to call the OData endpoint
+    - fetch() is async (it returns a Promise, explained below)
+
+  ABAP analogy: fetch() is like calling a remote function module (RFC).
+  You call it, wait for the response, then process the result.
+  The async/await syntax is how JavaScript handles waiting.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 2 — Live Data with fetch()</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background-color: #f5f5f5;
+    }
+    h1 { color: #0a6ed1; }
+    .stage-label {
+      background: #0a6ed1;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    th {
+      background: #0a6ed1;
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+    }
+    td { padding: 10px 16px; border-bottom: 1px solid #e0e0e0; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f7ff; }
+    .stock-low { color: #e76500; font-weight: bold; }
+    .stock-out { color: #bb0000; font-weight: bold; }
+    .note {
+      background: #f0f7ff;
+      border-left: 4px solid #0a6ed1;
+      padding: 12px 16px;
+      margin: 20px 0;
+      font-size: 0.9em;
+    }
+    .error-box {
+      background: #fff0f0;
+      border-left: 4px solid #bb0000;
+      padding: 12px 16px;
+      margin: 20px 0;
+      display: none;
+    }
+    .loading { color: #666; font-style: italic; }
+    .endpoint-url {
+      font-family: monospace;
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <span class="stage-label">Stage 2 of 4</span>
+  <h1>Product Catalog — Live Data</h1>
+
+  <div class="note">
+    <strong>What changed from Stage 1:</strong> The data comes from a live HTTP request
+    to the CAP OData endpoint:
+    <span class="endpoint-url">http://localhost:4004/odata/v4/catalog/Products</span><br><br>
+    Open DevTools (F12 → Network tab) and reload the page. You'll see the HTTP request,
+    its URL, the status code (200 OK), and the JSON response body.
+  </div>
+
+  <div id="error-box" class="error-box">
+    <strong>Could not load products.</strong><br>
+    <span id="error-message"></span><br><br>
+    Is the backend running? Run: <code>cd src/backend &amp;&amp; cds watch</code>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+    <tbody id="product-table-body">
+      <tr>
+        <td colspan="5" class="loading">Loading products from OData service...</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p id="record-count" style="color: #666; font-size: 0.9em;"></p>
+
+  <script>
+    // =========================================================
+    // THE ENDPOINT — where we fetch data from
+    //
+    // This is the OData v4 endpoint that CAP exposes automatically
+    // based on srv/catalog.cds. The full URL when running locally:
+    //   http://localhost:4004/odata/v4/catalog/Products
+    //
+    // We use a relative URL (/odata/v4/catalog/Products) so it
+    // works regardless of the hostname.
+    // =========================================================
+    const ODATA_BASE = "http://localhost:4004/odata/v4/catalog";
+
+    // =========================================================
+    // RENDER FUNCTION — same as Stage 1, unchanged
+    //
+    // The data source changed (network instead of hardcoded array),
+    // but the rendering logic is identical.
+    // This is intentional — separation of concerns.
+    // =========================================================
+    function renderProducts(productList) {
+      const tbody = document.getElementById("product-table-body");
+      tbody.innerHTML = "";
+
+      productList.forEach(function(product) {
+        let stockDisplay = product.Stock;
+        let stockClass = "";
+        if (product.Stock === 0) {
+          stockDisplay = "Out of Stock";
+          stockClass = "stock-out";
+        } else if (product.Stock < 20) {
+          stockDisplay = product.Stock + " (Low)";
+          stockClass = "stock-low";
+        }
+
+        const priceFormatted = "$" + product.Price.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        // Category is now an object with an ID (the FK value).
+        // In this stage we don't $expand, so we only have Category_ID.
+        // In Stage 3 we'll use $expand=Category to get the full name.
+        const categoryDisplay = product.Category_ID || product.Category || "—";
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${product.ID}</td>
+            <td>${product.Name}</td>
+            <td>${categoryDisplay}</td>
+            <td>${priceFormatted}</td>
+            <td class="${stockClass}">${stockDisplay}</td>
+          </tr>
+        `;
+      });
+
+      document.getElementById("record-count").textContent =
+        productList.length + " products loaded from OData service";
+    }
+
+    // =========================================================
+    // LOAD FUNCTION — the new part: makes the HTTP request
+    //
+    // fetch() is asynchronous — it does NOT block while waiting
+    // for the network. Instead, it returns a Promise.
+    //
+    // async/await is syntax sugar for working with Promises:
+    //   - 'async' marks a function as asynchronous
+    //   - 'await' pauses execution until the Promise resolves
+    //
+    // ABAP analogy: Like an asynchronous RFC call (aRFC) where
+    // you wait for the callback before processing results.
+    //
+    // The try/catch handles errors — if the backend isn't running,
+    // or the network fails, we show an error message instead of
+    // crashing silently.
+    // =========================================================
+    async function loadProducts() {
+      try {
+        // Step 1: Send the HTTP GET request
+        // fetch() returns immediately with a Promise
+        // 'await' waits until the response arrives
+        const response = await fetch(ODATA_BASE + "/Products");
+
+        // Step 2: Check the HTTP status code
+        // response.ok is true for 200-299 status codes
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        // Step 3: Parse the JSON body
+        // response.json() is also async (the body streams in)
+        const data = await response.json();
+
+        // Step 4: OData wraps collections in { "value": [...] }
+        // Extract the array of products
+        const products = data.value;
+
+        console.log("Loaded from OData:", products);
+        console.log("First product:", products[0]);
+
+        // Step 5: Render — same function as Stage 1
+        renderProducts(products);
+
+      } catch (error) {
+        // Show the error in the UI instead of just the console
+        console.error("Failed to load products:", error);
+        document.getElementById("error-box").style.display = "block";
+        document.getElementById("error-message").textContent = error.message;
+        document.getElementById("product-table-body").innerHTML =
+          '<tr><td colspan="5" style="color:#bb0000">Failed to load data.</td></tr>';
+      }
+    }
+
+    // =========================================================
+    // ENTRY POINT — start the data load when the page opens
+    // =========================================================
+    loadProducts();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!--
+  STAGE 1: Web Basics — No Network, No Server
+  ===========================================
+  This page has NO fetch() call and NO server.
+  All data lives in the JavaScript array below.
+
+  Goals of this exercise:
+    1. Understand HTML structure (tags, attributes, ids)
+    2. Understand JavaScript: variables, arrays, functions
+    3. Understand the DOM: how JS modifies what you see
+
+  After reading this file, open it in your browser (double-click it
+  or right-click in VS Code → Open with Live Server).
+  Then open the browser console: F12 → Console tab.
+
+  ABAP analogy: This page is like a simple ALV report with an
+  internal table already filled — no SELECT, just display.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 1 — Hardcoded Product List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background-color: #f5f5f5;
+    }
+    h1 { color: #0a6ed1; }  /* SAP Fiori blue */
+    .stage-label {
+      background: #0a6ed1;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    th {
+      background: #0a6ed1;
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+    }
+    td { padding: 10px 16px; border-bottom: 1px solid #e0e0e0; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f7ff; }
+    .stock-low { color: #e76500; font-weight: bold; }
+    .stock-out { color: #bb0000; font-weight: bold; }
+    .note {
+      background: #fffbf0;
+      border-left: 4px solid #e76500;
+      padding: 12px 16px;
+      margin: 20px 0;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+  <span class="stage-label">Stage 1 of 4</span>
+  <h1>Product Catalog</h1>
+
+  <div class="note">
+    <strong>What you are looking at:</strong> This data comes from a JavaScript array
+    in this HTML file — not from a server. There is no network request.
+    Open DevTools (F12 → Network tab) and you'll see zero API calls.
+    In Stage 2, we replace this array with a live fetch() from the CAP backend.
+  </div>
+
+  <!-- This empty table will be filled by the JavaScript below.
+       The 'id' attribute gives JavaScript a way to find this element.
+       ABAP analogy: Like a named screen element that ABAP can write to. -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+    <tbody id="product-table-body">
+      <!-- JavaScript will insert rows here -->
+    </tbody>
+  </table>
+
+  <p id="record-count" style="color: #666; font-size: 0.9em;"></p>
+
+  <script>
+    // =========================================================
+    // THE DATA — an array of product objects
+    //
+    // In JavaScript, [] is an array (like an ABAP internal table)
+    // and {} is an object (like an ABAP structure).
+    //
+    // This data mirrors what the CAP backend will return in Stage 2.
+    // The properties (ID, Name, Category, Price, Stock) match the
+    // CDS entity fields in src/backend/db/schema.cds.
+    // =========================================================
+    const products = [
+      { ID: 1,  Name: "Laptop Pro 15",        Category: "Electronics",     Price: 1299.99, Stock: 45  },
+      { ID: 2,  Name: "Laptop Air 13",         Category: "Electronics",     Price:  999.99, Stock: 32  },
+      { ID: 3,  Name: "Desktop Workstation",   Category: "Electronics",     Price: 1899.99, Stock: 12  },
+      { ID: 4,  Name: "Wireless Mouse",        Category: "Peripherals",     Price:   29.99, Stock: 230 },
+      { ID: 5,  Name: "Mechanical Keyboard",   Category: "Peripherals",     Price:   89.99, Stock: 78  },
+      { ID: 6,  Name: "27-inch Monitor 4K",    Category: "Peripherals",     Price:  549.99, Stock: 25  },
+      { ID: 7,  Name: "Webcam HD 1080p",       Category: "Peripherals",     Price:   79.99, Stock: 110 },
+      { ID: 8,  Name: "USB-C Hub 7-in-1",      Category: "Networking",      Price:   49.99, Stock: 185 },
+      { ID: 9,  Name: "Ethernet Switch 8-Port",Category: "Networking",      Price:   65.00, Stock: 55  },
+      { ID: 10, Name: "WiFi 6 Router",         Category: "Networking",      Price:  189.99, Stock: 40  },
+      { ID: 11, Name: "Ballpoint Pens",        Category: "Office Supplies", Price:    8.99, Stock: 500 },
+      { ID: 12, Name: "Sticky Notes Pack",     Category: "Office Supplies", Price:    5.49, Stock: 320 },
+      { ID: 13, Name: "Legal Pad A4 (5-pack)", Category: "Office Supplies", Price:   12.99, Stock: 210 },
+      { ID: 14, Name: "External SSD 1TB",      Category: "Storage",         Price:  109.99, Stock: 95  },
+      { ID: 15, Name: "USB Flash Drive 64GB",  Category: "Storage",         Price:   14.99, Stock: 0   },
+      { ID: 16, Name: "NAS Drive 4TB",         Category: "Storage",         Price:  299.99, Stock: 18  },
+    ];
+
+    // =========================================================
+    // THE FUNCTION — turns data into HTML table rows
+    //
+    // This is the "rendering" step. We loop over the products
+    // array and build an HTML string for each row.
+    //
+    // ABAP analogy: Like a LOOP AT lt_products ... WRITE statement,
+    // except we're building HTML instead of writing to a screen.
+    // =========================================================
+    function renderProducts(productList) {
+      // Find the <tbody> element in the HTML above
+      const tbody = document.getElementById("product-table-body");
+
+      // Clear any existing rows
+      tbody.innerHTML = "";
+
+      // Loop over the array
+      productList.forEach(function(product) {
+        // Determine stock display
+        let stockDisplay = product.Stock;
+        let stockClass = "";
+        if (product.Stock === 0) {
+          stockDisplay = "Out of Stock";
+          stockClass = "stock-out";
+        } else if (product.Stock < 20) {
+          stockDisplay = product.Stock + " (Low)";
+          stockClass = "stock-low";
+        }
+
+        // Format price as currency
+        // .toLocaleString() applies locale-appropriate number formatting
+        const priceFormatted = "$" + product.Price.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        // Build an HTML string for this row
+        // Template literals (backtick strings) allow embedding expressions with ${}
+        // ABAP analogy: like string concatenation with CONCATENATE or &
+        const row = `
+          <tr>
+            <td>${product.ID}</td>
+            <td>${product.Name}</td>
+            <td>${product.Category}</td>
+            <td>${priceFormatted}</td>
+            <td class="${stockClass}">${stockDisplay}</td>
+          </tr>
+        `;
+
+        // Add the row HTML to the table body
+        tbody.innerHTML += row;
+      });
+
+      // Update the record count below the table
+      document.getElementById("record-count").textContent =
+        productList.length + " products";
+    }
+
+    // =========================================================
+    // ENTRY POINT — runs immediately when the page loads
+    //
+    // Call renderProducts() with the full products array.
+    // In Stage 2, this is where the fetch() call will go.
+    // =========================================================
+    renderProducts(products);
+
+    // Print the data to the console too — open F12 → Console to see it
+    console.log("Stage 1: Loaded " + products.length + " products from hardcoded array");
+    console.log("First product:", products[0]);
+  </script>
+
+</body>
+</html>

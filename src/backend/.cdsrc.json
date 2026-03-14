@@ -1,0 +1,13 @@
+{
+  "requires": {
+    "db": {
+      "kind": "sqlite",
+      "credentials": {
+        "database": ":memory:"
+      }
+    }
+  },
+  "features": {
+    "serve_on_root": true
+  }
+}

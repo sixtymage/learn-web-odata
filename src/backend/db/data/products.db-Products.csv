@@ -1,0 +1,17 @@
+ID,Name,Category_ID,Price,Stock
+1,Laptop Pro 15,1,1299.99,45
+2,Laptop Air 13,1,999.99,32
+3,Desktop Workstation,1,1899.99,12
+4,Wireless Mouse,2,29.99,230
+5,Mechanical Keyboard,2,89.99,78
+6,27-inch Monitor 4K,2,549.99,25
+7,Webcam HD 1080p,2,79.99,110
+8,USB-C Hub 7-in-1,4,49.99,185
+9,Ethernet Switch 8-Port,4,65.00,55
+10,WiFi 6 Router,4,189.99,40
+11,Ballpoint Pens (Box of 50),3,8.99,500
+12,Sticky Notes Pack,3,5.49,320
+13,Legal Pad A4 (5-pack),3,12.99,210
+14,External SSD 1TB,5,109.99,95
+15,USB Flash Drive 64GB,5,14.99,0
+16,NAS Drive 4TB,5,299.99,18

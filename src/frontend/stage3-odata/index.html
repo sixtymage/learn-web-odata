@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<!--
+  STAGE 3: OData Query Parameters — By Hand
+  ==========================================
+  This page lets you construct OData queries interactively.
+  Every query option is controlled by a UI element that builds
+  the URL — you can see exactly what gets sent.
+
+  Goals:
+    - Understand $filter, $select, $orderby, $top/$skip, $expand
+    - Build OData URLs manually so you recognise them in the future
+    - See how Fiori filter bars work under the hood
+
+  The URL bar at the top shows the exact request being made.
+  Open DevTools (F12 → Network tab) to see the raw HTTP exchange.
+
+  ABAP analogy: This is like writing Open SQL with every possible
+  clause — WHERE, FIELDS, ORDER BY, UP TO n ROWS, with a JOIN —
+  but the syntax is a URL instead of an ABAP statement.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 3 — OData Queries</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background-color: #f5f5f5;
+    }
+    h1 { color: #0a6ed1; margin-bottom: 4px; }
+    .stage-label {
+      background: #0a6ed1;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+
+    /* --- Filter Panel --- */
+    .filter-panel {
+      background: white;
+      padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      margin-bottom: 16px;
+    }
+    .filter-panel h2 { margin: 0 0 16px; font-size: 1em; color: #333; }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.8em;
+      font-weight: bold;
+      color: #666;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 0.9em;
+      box-sizing: border-box;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: #0a6ed1;
+    }
+    .filter-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    button {
+      background: #0a6ed1;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    button:hover { background: #085caf; }
+    button.secondary {
+      background: white;
+      color: #0a6ed1;
+      border: 1px solid #0a6ed1;
+    }
+    button.secondary:hover { background: #f0f7ff; }
+
+    /* --- URL Display --- */
+    .url-display {
+      background: #1e1e1e;
+      color: #9cdcfe;
+      padding: 12px 16px;
+      font-family: monospace;
+      font-size: 0.85em;
+      border-radius: 3px;
+      margin-bottom: 16px;
+      word-break: break-all;
+    }
+    .url-display .method { color: #569cd6; margin-right: 8px; }
+    .url-display .param-key { color: #ce9178; }
+    .url-display .param-val { color: #b5cea8; }
+
+    /* --- Results --- */
+    .result-meta {
+      color: #666;
+      font-size: 0.85em;
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    th {
+      background: #0a6ed1;
+      color: white;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 0.85em;
+    }
+    td { padding: 8px 14px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f7ff; }
+    .stock-low { color: #e76500; }
+    .stock-out { color: #bb0000; }
+    .expanded-category {
+      background: #f8f8f8;
+      font-size: 0.8em;
+      color: #555;
+    }
+
+    /* --- Paging --- */
+    .paging {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      align-items: center;
+    }
+    .paging span { color: #666; font-size: 0.9em; }
+
+    /* --- Explanation Box --- */
+    .explain {
+      background: #fffbf0;
+      border-left: 4px solid #e76500;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-size: 0.85em;
+      line-height: 1.5;
+    }
+    .explain code { background: #f0f0f0; padding: 1px 4px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+  <span class="stage-label">Stage 3 of 4</span>
+  <h1>OData Query Explorer</h1>
+
+  <div class="explain">
+    <strong>How to use this page:</strong> Adjust the filters below and click <em>Run Query</em>.
+    The exact URL being sent appears before the results.
+    Open DevTools (F12 → Network) to inspect the raw request and response.
+    These are the same URLs that Fiori apps generate from filter bars and tables.
+  </div>
+
+  <!-- =========================================================
+       FILTER PANEL
+       Each control maps to an OData query option.
+       ========================================================= -->
+  <div class="filter-panel">
+    <h2>Query Options</h2>
+    <div class="filter-grid">
+
+      <!-- $filter: Price -->
+      <div class="filter-group">
+        <label>$filter — Price</label>
+        <select id="filter-price-op">
+          <option value="">(no price filter)</option>
+          <option value="gt">greater than (&gt;)</option>
+          <option value="ge">greater or equal (&ge;)</option>
+          <option value="lt">less than (&lt;)</option>
+          <option value="le">less or equal (&le;)</option>
+        </select>
+        <input type="number" id="filter-price-val" placeholder="e.g. 100" style="margin-top:4px;">
+      </div>
+
+      <!-- $filter: Name contains -->
+      <div class="filter-group">
+        <label>$filter — Name contains</label>
+        <input type="text" id="filter-name" placeholder="e.g. Laptop">
+      </div>
+
+      <!-- $filter: Category -->
+      <div class="filter-group">
+        <label>$filter — Category ID</label>
+        <select id="filter-category">
+          <option value="">(all categories)</option>
+          <option value="1">1 — Electronics</option>
+          <option value="2">2 — Peripherals</option>
+          <option value="3">3 — Office Supplies</option>
+          <option value="4">4 — Networking</option>
+          <option value="5">5 — Storage</option>
+        </select>
+      </div>
+
+      <!-- $select -->
+      <div class="filter-group">
+        <label>$select — Fields to return</label>
+        <select id="select-fields">
+          <option value="">All fields</option>
+          <option value="ID,Name,Price">ID, Name, Price only</option>
+          <option value="ID,Name,Stock">ID, Name, Stock only</option>
+          <option value="Name,Price,Stock">Name, Price, Stock</option>
+        </select>
+      </div>
+
+      <!-- $orderby -->
+      <div class="filter-group">
+        <label>$orderby — Sort</label>
+        <select id="orderby">
+          <option value="">Default order</option>
+          <option value="Price asc">Price ascending</option>
+          <option value="Price desc">Price descending</option>
+          <option value="Name asc">Name A→Z</option>
+          <option value="Name desc">Name Z→A</option>
+          <option value="Stock asc">Stock (lowest first)</option>
+        </select>
+      </div>
+
+      <!-- $top -->
+      <div class="filter-group">
+        <label>$top — Max rows</label>
+        <select id="top-val">
+          <option value="">All records</option>
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+
+      <!-- $expand -->
+      <div class="filter-group">
+        <label>$expand — Follow relationships</label>
+        <select id="expand-val">
+          <option value="">No expand</option>
+          <option value="Category">Category (follow FK to Categories table)</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="filter-actions">
+      <button onclick="runQuery()">Run Query</button>
+      <button class="secondary" onclick="resetFilters()">Reset</button>
+      <span id="query-time" style="color:#666; font-size:0.85em;"></span>
+    </div>
+  </div>
+
+  <!-- URL being sent -->
+  <div class="url-display" id="url-display">
+    <span class="method">GET</span>
+    <span id="url-text">http://localhost:4004/odata/v4/catalog/Products</span>
+  </div>
+
+  <!-- Results -->
+  <div class="result-meta" id="result-meta"></div>
+
+  <table>
+    <thead id="table-head">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+    <tbody id="product-table-body">
+      <tr><td colspan="5" style="color:#666; font-style:italic;">
+        Click "Run Query" to load data from the OData endpoint.
+      </td></tr>
+    </tbody>
+  </table>
+
+  <!-- Paging controls -->
+  <div class="paging" id="paging-controls" style="display:none">
+    <button class="secondary" onclick="prevPage()" id="btn-prev">Previous</button>
+    <span id="page-info"></span>
+    <button class="secondary" onclick="nextPage()" id="btn-next">Next</button>
+  </div>
+
+  <script>
+    const ODATA_BASE = "http://localhost:4004/odata/v4/catalog";
+
+    // Paging state
+    let currentSkip = 0;
+    let currentTop = null;
+    let lastUrl = "";
+
+    // =========================================================
+    // BUILD THE ODATA URL from form values
+    //
+    // This is the core of Stage 3. Each query option maps
+    // directly to a URL parameter.
+    //
+    // ABAP analogy: Like building a SELECT statement string
+    // by assembling each clause based on user input.
+    // =========================================================
+    function buildUrl(skip = 0) {
+      const params = [];
+
+      // $filter — can combine multiple conditions with 'and'
+      const filterParts = [];
+
+      const priceOp  = document.getElementById("filter-price-op").value;
+      const priceVal = document.getElementById("filter-price-val").value;
+      if (priceOp && priceVal) {
+        filterParts.push(`Price ${priceOp} ${parseFloat(priceVal)}`);
+      }
+
+      const nameVal = document.getElementById("filter-name").value.trim();
+      if (nameVal) {
+        // contains() is an OData function — like SQL LIKE '%x%'
+        filterParts.push(`contains(Name,'${nameVal}')`);
+      }
+
+      const catVal = document.getElementById("filter-category").value;
+      if (catVal) {
+        filterParts.push(`Category_ID eq ${catVal}`);
+      }
+
+      if (filterParts.length > 0) {
+        params.push("$filter=" + filterParts.join(" and "));
+      }
+
+      // $select — comma-separated field list
+      const selectVal = document.getElementById("select-fields").value;
+      if (selectVal) {
+        params.push("$select=" + selectVal);
+      }
+
+      // $orderby
+      const orderbyVal = document.getElementById("orderby").value;
+      if (orderbyVal) {
+        params.push("$orderby=" + encodeURIComponent(orderbyVal));
+      }
+
+      // $top
+      const topVal = document.getElementById("top-val").value;
+      currentTop = topVal ? parseInt(topVal) : null;
+      if (currentTop) {
+        params.push("$top=" + currentTop);
+      }
+
+      // $skip — for paging
+      if (skip > 0) {
+        params.push("$skip=" + skip);
+      }
+
+      // $expand — follow an association to include related data
+      const expandVal = document.getElementById("expand-val").value;
+      if (expandVal) {
+        params.push("$expand=" + expandVal);
+      }
+
+      const base = ODATA_BASE + "/Products";
+      return params.length > 0 ? base + "?" + params.join("&") : base;
+    }
+
+    // =========================================================
+    // DISPLAY THE URL — with syntax highlighting
+    // =========================================================
+    function displayUrl(url) {
+      const [base, query] = url.split("?");
+      let html = base;
+      if (query) {
+        html += "?";
+        const parts = query.split("&").map(part => {
+          const [key, val] = part.split("=");
+          return `<span class="param-key">${key}</span>=<span class="param-val">${decodeURIComponent(val || "")}</span>`;
+        });
+        html += parts.join("<span style='color:#666'>&amp;</span>");
+      }
+      document.getElementById("url-text").innerHTML = html;
+    }
+
+    // =========================================================
+    // RENDER RESULTS
+    // =========================================================
+    function renderProducts(products, hasExpand) {
+      const tbody = document.getElementById("product-table-body");
+      tbody.innerHTML = "";
+
+      if (products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="color:#666; font-style:italic;">No products match the filter.</td></tr>';
+        return;
+      }
+
+      // Update header based on whether we have expanded Category
+      const thead = document.getElementById("table-head");
+      thead.innerHTML = `<tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>${hasExpand ? "Category (expanded)" : "Category ID"}</th>
+        <th>Price</th>
+        <th>Stock</th>
+      </tr>`;
+
+      products.forEach(product => {
+        let stockDisplay = product.Stock !== undefined ? product.Stock : "—";
+        let stockClass = "";
+        if (product.Stock === 0) { stockDisplay = "Out of Stock"; stockClass = "stock-out"; }
+        else if (product.Stock < 20 && product.Stock !== undefined) {
+          stockDisplay = product.Stock + " (Low)"; stockClass = "stock-low";
+        }
+
+        const price = product.Price !== undefined
+          ? "$" + product.Price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          : "—";
+
+        // If $expand=Category was used, product.Category is an object with {ID, Name}
+        // Otherwise product.Category_ID is just the foreign key number
+        let categoryDisplay = "—";
+        if (hasExpand && product.Category) {
+          categoryDisplay = `<span class="expanded-category">[ID:${product.Category.ID}] </span>${product.Category.Name}`;
+        } else if (product.Category_ID !== undefined) {
+          categoryDisplay = product.Category_ID;
+        }
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${product.ID ?? "—"}</td>
+            <td>${product.Name ?? "—"}</td>
+            <td>${categoryDisplay}</td>
+            <td>${price}</td>
+            <td class="${stockClass}">${stockDisplay}</td>
+          </tr>`;
+      });
+    }
+
+    // =========================================================
+    // RUN QUERY — fetch from the constructed URL
+    // =========================================================
+    async function runQuery(skip = 0) {
+      currentSkip = skip;
+      const url = buildUrl(skip);
+      lastUrl = url;
+      displayUrl(url);
+
+      const meta = document.getElementById("result-meta");
+      meta.textContent = "Loading...";
+
+      const tbody = document.getElementById("product-table-body");
+      tbody.innerHTML = '<tr><td colspan="5" style="color:#666; font-style:italic;">Fetching...</td></tr>';
+
+      const start = Date.now();
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        const data = await response.json();
+        const elapsed = Date.now() - start;
+
+        const products = data.value;
+        const hasExpand = document.getElementById("expand-val").value !== "";
+
+        renderProducts(products, hasExpand);
+
+        meta.textContent = `${products.length} record${products.length !== 1 ? "s" : ""} returned in ${elapsed}ms`;
+        document.getElementById("query-time").textContent = `${elapsed}ms`;
+
+        // Show paging controls if $top is set
+        if (currentTop) {
+          document.getElementById("paging-controls").style.display = "flex";
+          document.getElementById("page-info").textContent =
+            `Rows ${skip + 1}–${skip + products.length}`;
+          document.getElementById("btn-prev").disabled = skip === 0;
+          document.getElementById("btn-next").disabled = products.length < currentTop;
+        } else {
+          document.getElementById("paging-controls").style.display = "none";
+        }
+
+      } catch (err) {
+        console.error(err);
+        meta.textContent = "Error: " + err.message;
+        tbody.innerHTML = `<tr><td colspan="5" style="color:#bb0000">
+          ${err.message}<br><small>Is the backend running? Try: cd src/backend &amp;&amp; cds watch</small>
+        </td></tr>`;
+      }
+    }
+
+    function prevPage() {
+      if (currentSkip >= currentTop) runQuery(currentSkip - currentTop);
+    }
+
+    function nextPage() {
+      runQuery(currentSkip + currentTop);
+    }
+
+    function resetFilters() {
+      document.getElementById("filter-price-op").value = "";
+      document.getElementById("filter-price-val").value = "";
+      document.getElementById("filter-name").value = "";
+      document.getElementById("filter-category").value = "";
+      document.getElementById("select-fields").value = "";
+      document.getElementById("orderby").value = "";
+      document.getElementById("top-val").value = "";
+      document.getElementById("expand-val").value = "";
+      currentSkip = 0;
+      displayUrl(ODATA_BASE + "/Products");
+    }
+
+    // Show the default URL on load
+    displayUrl(ODATA_BASE + "/Products");
+  </script>
+
+</body>
+</html>

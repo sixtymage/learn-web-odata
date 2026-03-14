@@ -1,0 +1,83 @@
+# ============================================================
+# docker-compose.yml — Three-Tier Setup (Stage 5)
+#
+# Starts two services:
+#   db      — PostgreSQL database
+#   backend — SAP CAP service connected to PostgreSQL
+#
+# Usage:
+#   docker compose up        # start both services
+#   docker compose up -d     # start in background (detached)
+#   docker compose down      # stop and remove containers
+#   docker compose logs -f   # tail logs from all services
+#
+# After starting:
+#   http://localhost:4004/odata/v4/catalog/Products
+#
+# ABAP analogy:
+#   db      = the database server (like HANA or DB2)
+#   backend = the application server (like the ABAP AS)
+#   This docker-compose.yml = the system landscape definition
+# ============================================================
+
+services:
+
+  # ----------------------------------------------------------
+  # PostgreSQL Database
+  #
+  # Uses the official PostgreSQL Docker image.
+  # Data is stored in a named volume (odata-pg-data) so it
+  # persists across container restarts.
+  # ----------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB:       odata_learn
+      POSTGRES_USER:     cap_user
+      POSTGRES_PASSWORD: cap_password
+    volumes:
+      - odata-pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"   # Expose PostgreSQL port (optional — only needed for direct DB access)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cap_user -d odata_learn"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ----------------------------------------------------------
+  # CAP Backend Service
+  #
+  # Builds from src/backend/ using the Dockerfile there.
+  # Waits for PostgreSQL to be healthy before starting.
+  #
+  # Environment variables switch CAP from SQLite to PostgreSQL.
+  # The CDS data model (schema.cds) is unchanged — only the
+  # database connection changes.
+  #
+  # ABAP analogy: Like switching the system DB connection profile
+  # from a test system to a production database — the ABAP code
+  # doesn't change, only the infrastructure config.
+  # ----------------------------------------------------------
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    ports:
+      - "4004:4004"
+    environment:
+      # Tell CAP to use PostgreSQL instead of SQLite
+      CDS_REQUIRES_DB_KIND:                  postgres
+      CDS_REQUIRES_DB_CREDENTIALS_HOST:      db
+      CDS_REQUIRES_DB_CREDENTIALS_PORT:      5432
+      CDS_REQUIRES_DB_CREDENTIALS_DATABASE:  odata_learn
+      CDS_REQUIRES_DB_CREDENTIALS_USER:      cap_user
+      CDS_REQUIRES_DB_CREDENTIALS_PASSWORD:  cap_password
+      NODE_ENV:                              production
+    depends_on:
+      db:
+        condition: service_healthy
+
+# Named volume — PostgreSQL data persists here between restarts
+volumes:
+  odata-pg-data:
