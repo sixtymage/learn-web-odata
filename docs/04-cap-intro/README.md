@@ -249,7 +249,11 @@ seeing the effect immediately in the browser — no rebuild, no restart.
 
 **What you need running:**
 
-- **Terminal 1:** `cd src/backend && npm run watch`
+- **Terminal 1:** Start a fresh instance of the backend — even if it is already running, stop it first (`Ctrl+C`) and restart it, so you are certain the latest code is loaded:
+  ```bash
+  cd src/backend
+  npm run watch
+  ```
 - **Terminal 2:** `npx serve src/frontend/stage3-odata` (stop Stage 2's server first with `Ctrl+C` if still running — and yes, this is intentionally the Stage 3 UI. Stage 4 is a server-side change only; the UI does not need to change at all)
 
 Open the Stage 3 app in your browser.

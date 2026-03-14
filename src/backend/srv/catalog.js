@@ -41,8 +41,11 @@ module.exports = cds.service.impl(function () {
   // ----------------------------------------------------------
   this.before("READ", Products, (req) => {
     const BLOCKED = ["fuck", "shit", "bastard"];
-    const query = JSON.stringify(req.query).toLowerCase();
-    const found = BLOCKED.find((word) => query.includes(word));
+    // req.query is the parsed CQN — the $filter has not been applied to it yet
+    // at the before() stage. The raw OData query params (including $filter as a
+    // plain string) are in req._.query, which is the Express request's query object.
+    const rawParams = JSON.stringify(req._.query || {}).toLowerCase();
+    const found = BLOCKED.find((word) => rawParams.includes(word));
     if (found) {
       req.error(400, "That search term is not permitted.");
     }
