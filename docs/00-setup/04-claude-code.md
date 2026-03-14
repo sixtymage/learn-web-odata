@@ -134,5 +134,26 @@ Claude Code will pull in the file contents automatically. This works for any fil
 
 ---
 
+## Optional: Usage and Cost Status Line
+
+You can add a live status line to Claude Code that shows the active model, session cost,
+daily spend, burn rate, and context usage — visible at the bottom of every Claude Code session.
+
+To enable it, create (or edit) the file `~/.claude/settings.json` with these contents:
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y ccusage@latest statusline"
+  }
+}
+```
+
+Save the file and start a new Claude Code session. The status line appears automatically —
+no further setup needed. The `ccusage` tool is downloaded on first use.
+
+---
+
 *The CLAUDE.md file at the root of this repo tells Claude Code everything it needs to know*
 *about you and this learning path. You can open it and read it yourself to see what it says.*
