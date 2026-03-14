@@ -42,8 +42,8 @@ After completing this stage you will have four server processes running alongsid
 │ :3000     │   │  localhost:4004      │   │  localhost:5050      │
 │ (static   │   │  CAP / OData         │   │  (Docker)            │
 │  files)   │   └──────────┬───────────┘   └──────────┬───────────┘
-└───────────┘              │ SQL                       │ SQL
-                           └─────────────┬─────────────┘
+└───────────┘              │ SQL                      │ SQL
+                           └─────────────┬────────────┘
                                          ▼
                            ┌──────────────────────────┐
                            │  PostgreSQL              │
@@ -262,7 +262,7 @@ and all six frontend stages are byte-for-byte identical to what they were in Sta
 ## Stopping Everything
 
 ```bash
-# Stop the CAP service
+# Stop the CAP service and the UI service
 Ctrl+C
 
 # Stop and remove the Docker containers (data is preserved in the volume)
