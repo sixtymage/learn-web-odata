@@ -120,30 +120,27 @@ When you see:
 
 ---
 
-## Auto-Generated OData
+## What CAP Does with Your OData Queries
 
-CAP automatically handles all OData query options. You don't write any query logic.
+In Stage 3 you ran OData queries from the browser and saw the results.
+CAP was handling every one of those queries automatically — no custom code.
+Here is what it was actually doing behind the scenes for each query option:
 
-Try these URLs in the browser once the service is running:
+| OData query option | SQL CAP generates |
+|---|---|
+| `$filter=Price gt 500` | `WHERE Price > 500` |
+| `$select=Name,Price` | `SELECT Name, Price` |
+| `$orderby=Price desc` | `ORDER BY Price DESC` |
+| `$top=5&$skip=5` | `LIMIT 5 OFFSET 5` |
+| `$expand=Category` | `LEFT JOIN Categories ON Products.Category_ID = Categories.ID` |
 
-```
-# All products
-http://localhost:4004/odata/v4/catalog/Products
+You wrote none of that SQL. You declared the data model in `db/schema.cds`,
+declared the service in `srv/catalog.cds`, and CAP derived everything else.
 
-# Filter: price over $500
-http://localhost:4004/odata/v4/catalog/Products?$filter=Price gt 500
-
-# Select specific fields
-http://localhost:4004/odata/v4/catalog/Products?$select=Name,Price
-
-# Expand the category relationship
-http://localhost:4004/odata/v4/catalog/Products?$expand=Category
-
-# Combined
-http://localhost:4004/odata/v4/catalog/Products?$filter=Stock gt 0&$orderby=Price desc&$top=5
-```
-
-CAP translates each of these into SQL and returns the result. Zero custom code.
+**ABAP analogy:** This is what RAP does in modern ABAP — you define the Business Object,
+and the framework generates the OData service and translates query options into Open SQL.
+Before RAP, you wrote each GET_ENTITY and GET_ENTITYSET method by hand in SEGW.
+CAP is the equivalent leap forward for Node.js backends.
 
 ---
 
