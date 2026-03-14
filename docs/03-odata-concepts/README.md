@@ -89,6 +89,8 @@ You can combine them with `&`.
 GET /odata/v4/catalog/Products?$select=Name,Price
 ```
 
+Try it: <http://localhost:4004/odata/v4/catalog/Products?$select=Name,Price>
+
 **ABAP analogy:** Like `SELECT Name Price INTO TABLE lt_products FROM products`.
 
 Only the specified fields come back:
@@ -108,6 +110,8 @@ Use `$select` when you only need a few fields — reduces payload size, improves
 ```
 GET /odata/v4/catalog/Products?$filter=Price gt 500
 ```
+
+Try it: <http://localhost:4004/odata/v4/catalog/Products?$filter=Price%20gt%20500>
 
 **ABAP analogy:** `SELECT * FROM products WHERE Price > 500`.
 
@@ -134,6 +138,8 @@ OData filter operators:
 GET /odata/v4/catalog/Products?$orderby=Price desc
 ```
 
+Try it: <http://localhost:4004/odata/v4/catalog/Products?$orderby=Price%20desc>
+
 **ABAP analogy:** `ORDER BY Price DESCENDING`.
 
 Multiple sort fields:
@@ -146,10 +152,12 @@ $orderby=Category_ID asc,Price desc
 ### $top and $skip — Paging
 
 ```
-GET /odata/v4/catalog/Products?$top=10&$skip=20
+GET /odata/v4/catalog/Products?$top=5&$skip=5
 ```
 
-Returns 10 records starting from record 21. This is how OData implements paging.
+Try it: <http://localhost:4004/odata/v4/catalog/Products?$top=5&$skip=5>
+
+Returns 5 records starting from record 6 (skips the first 5). This is how OData implements paging.
 
 **ABAP analogy:** Like using `UP TO n ROWS` with an offset, or ABAP paging with `PACKAGE SIZE`.
 
@@ -160,6 +168,8 @@ Returns 10 records starting from record 21. This is how OData implements paging.
 ```
 GET /odata/v4/catalog/Products?$expand=Category
 ```
+
+Try it: <http://localhost:4004/odata/v4/catalog/Products?$expand=Category>
 
 Instead of just returning the `Category_ID` field, this follows the relationship
 and includes the full Category object inline:
@@ -184,6 +194,8 @@ You can expand multiple levels:
 ```
 GET /odata/v4/catalog/Orders?$expand=Items($expand=Product)
 ```
+Try it: <http://localhost:4004/odata/v4/catalog/Orders?$expand=Items($expand=Product)>
+
 This returns Orders with their OrderItems, and each OrderItem includes its full Product.
 
 ---
