@@ -31,13 +31,13 @@ Every OData service has two fundamental endpoints:
 
 If `npm run watch` is still running from Stage 2, you can open this right now:
 
-[http://localhost:4004/odata/v4/catalog](http://localhost:4004/odata/v4/catalog)
+<http://localhost:4004/odata/v4/catalog>
 
 Returns a list of available entity sets (like a table of contents).
 
 ### $metadata
 
-[http://localhost:4004/odata/v4/catalog/$metadata](http://localhost:4004/odata/v4/catalog/$metadata)
+<http://localhost:4004/odata/v4/catalog/$metadata>
 
 Returns the full service description in XML — all entity types, their properties,
 their relationships, and available operations.
