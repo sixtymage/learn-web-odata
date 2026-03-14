@@ -158,26 +158,63 @@ telling it explicitly. It reads `$metadata` first.
 
 ---
 
-## Optional: Custom Handlers (`srv/catalog.js`)
+## Custom Handlers (`srv/catalog.js`)
 
-CAP's auto-generated behavior covers most use cases. When you need custom logic
-(validation, calculated fields, calling external APIs), you add a service handler.
+CAP's auto-generated behaviour covers most use cases. When you need custom logic —
+validation, calculated fields, calling external systems — you add a service handler.
 
-Open `src/backend/srv/catalog.js` to see an example.
+**Important:** `catalog.js` is JavaScript, but it does not run in the browser.
+It runs on the Node.js server, alongside the CDS runtime.
+The browser sends an HTTP request; this code intercepts it on the server
+before the database is touched. You have been writing JavaScript that runs
+*in* the browser (stages 1–3). This is JavaScript that runs *behind* it.
+
+**ABAP analogy:** This is like implementing a BAdI in a Business Object —
+the framework calls your code at defined hook points (before/after read, create, update, delete).
+
+Open `src/backend/srv/catalog.js`. The three handlers already there are:
+
+| Hook | Entity | What it does |
+|---|---|---|
+| `before CREATE` | `Orders` | Sets `Date` automatically if not provided |
+| `after READ` | `Products` | Adds a calculated `StockStatus` field (`In Stock` / `Low Stock` / `Out of Stock`) |
+| `before CREATE` | `OrderItems` | Checks the product exists and has sufficient stock before saving |
+
+### Exercise: Add a Profanity Filter
+
+A `before READ` hook on `Products` runs before every query — including those
+triggered by `$filter=contains(Name,'...')` from the Stage 3 app.
+
+The handler already added to `catalog.js` looks like this:
 
 ```javascript
-module.exports = cds.service.impl(function () {
-    this.before('CREATE', 'Orders', (req) => {
-        // Custom validation before creating an order
-        if (!req.data.Customer) {
-            req.error(400, 'Customer name is required');
-        }
-    });
+this.before("READ", Products, (req) => {
+    const BLOCKED = ["fuck", "shit", "bastard"];
+    const query = JSON.stringify(req.query).toLowerCase();
+    const found = BLOCKED.find((word) => query.includes(word));
+    if (found) {
+        req.error(400, "That search term is not permitted.");
+    }
 });
 ```
 
-**ABAP analogy:** This is like implementing the BAdI for a Business Object —
-the framework calls your code at specific points (before/after read, create, update, delete).
+`req.query` is the parsed OData query in CAP's internal format. Stringifying it
+lets us scan the entire query — filter values, field names, search terms — in one pass.
+
+`req.error(400, "...")` sends an HTTP 400 response to the caller and stops all
+further processing. The database is never queried.
+
+**Try it:**
+
+1. Make sure `npm run watch` is running (it will have reloaded automatically when `catalog.js` was saved)
+2. Open the Stage 3 app
+3. Type `fuck` in the **Name contains** filter and click **Run Query**
+4. The error message `That search term is not permitted.` should appear in the results area
+5. Open DevTools → Network → confirm the response status is `400`
+
+Then compare with a network error (stop the backend entirely) — that shows a different
+message prompting you to restart the server. The UI distinguishes between
+"the server rejected your request" and "the server is not running".
 
 ---
 

@@ -471,7 +471,21 @@
       const start = Date.now();
       try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
+
+        // If the server returned an error status (4xx, 5xx), extract the
+        // CAP error message from the JSON body before throwing.
+        // CAP error responses look like: { "error": { "message": "..." } }
+        if (!response.ok) {
+          let message = `HTTP ${response.status} ${response.statusText}`;
+          try {
+            const errBody = await response.json();
+            if (errBody?.error?.message) message = errBody.error.message;
+          } catch {}
+          const err = new Error(message);
+          err.isHttpError = true;
+          throw err;
+        }
+
         const data = await response.json();
         const elapsed = Date.now() - start;
 
@@ -497,8 +511,14 @@
       } catch (err) {
         console.error(err);
         meta.textContent = "Error: " + err.message;
+        // For HTTP errors (server replied but rejected the request), show the
+        // message on its own — the backend is running fine.
+        // For network errors (server unreachable), show the connection hint.
+        const hint = err.isHttpError
+          ? ""
+          : `<br><small>Is the backend running? Try: cd src/backend &amp;&amp; npm run watch</small>`;
         tbody.innerHTML = `<tr><td colspan="5" style="color:#bb0000">
-          ${err.message}<br><small>Is the backend running? Try: cd src/backend &amp;&amp; cds watch</small>
+          ${err.message}${hint}
         </td></tr>`;
       }
     }

@@ -19,6 +19,36 @@ module.exports = cds.service.impl(function () {
   const { Orders, OrderItems, Products } = this.entities;
 
   // ----------------------------------------------------------
+  // BEFORE READ Products — profanity filter
+  //
+  // Runs before every Products query, including those triggered
+  // by $filter=contains(Name,'...') from the browser.
+  //
+  // Note: this JavaScript runs on the Node.js server, not in
+  // the browser. The browser sends an HTTP request; this code
+  // intercepts it on the server before the database is touched.
+  //
+  // req.query is the parsed OData query in CAP's internal format
+  // (CQN — Core Query Notation). Stringifying it lets us scan
+  // the entire query — filter values, search terms, etc. — in
+  // one pass without unpacking the CQN structure by hand.
+  //
+  // req.error() sends an HTTP error response to the caller and
+  // stops processing. The browser receives a 400 with the message.
+  //
+  // ABAP analogy: Like a BAdI implementation on a READ operation
+  // that raises a MESSAGE E to abort and return an error to the UI.
+  // ----------------------------------------------------------
+  this.before("READ", Products, (req) => {
+    const BLOCKED = ["fuck", "shit", "bastard"];
+    const query = JSON.stringify(req.query).toLowerCase();
+    const found = BLOCKED.find((word) => query.includes(word));
+    if (found) {
+      req.error(400, "That search term is not permitted.");
+    }
+  });
+
+  // ----------------------------------------------------------
   // BEFORE CREATE Orders
   //
   // Runs before a new Order is saved to the database.
