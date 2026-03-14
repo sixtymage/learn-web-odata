@@ -6,6 +6,44 @@ changelists. Git is different in one important way: **it's distributed**.
 
 ---
 
+## Installation
+
+Download and install Git from [https://git-scm.com/downloads](https://git-scm.com/downloads).
+Accept the defaults during installation.
+
+After installing, open a terminal and confirm it worked:
+
+```bash
+git --version
+# → git version 2.x.x
+```
+
+---
+
+## First-Time Configuration
+
+Before you make your first commit, tell Git who you are. Every commit is stamped with
+this identity — it's how GitHub knows which commits belong to your account.
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+Use the same email address as your GitHub account.
+
+To confirm the settings were saved:
+
+```bash
+git config --global --list
+# → user.name=Your Name
+# → user.email=you@example.com
+```
+
+You only need to do this once per machine.
+
+---
+
 ## The Core Difference: Distributed vs. Centralized
 
 In SAP's transport system, there is one central system that holds the truth.
