@@ -10,8 +10,9 @@ the last, so that when the framework abstractions arrive, you already know what 
 
 ## Who This Is For
 
-Developers who know SAP deeply — ABAP, CDS Views, Business Objects, the transport system —
-but have little or no web frontend experience. This repo builds the bridge.
+Developers who know SAP deeply — ABAP, Business Objects, the transport system —
+but have little or no web frontend experience (and no prior CDS Views exposure needed).
+This repo builds the bridge.
 
 Every concept is explained in terms you already know. HTTP calls are RFC calls.
 `$filter` is a WHERE clause. `$expand` is a JOIN. CAP services are Business Objects

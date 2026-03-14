@@ -30,8 +30,10 @@ you define the business object and the framework generates the OData service.
 CDS is the language CAP uses to define data models and services.
 It exists in both the ABAP world and the CAP world, but the CAP version is simpler.
 
-**ABAP analogy:** CAP CDS is almost identical conceptually to ABAP CDS Views.
-If you've written CDS Views in ABAP, this will look very familiar.
+**ABAP analogy:** Think of CDS entities as ABAP Dictionary tables — you define
+the fields and their types, and the framework creates the physical storage.
+(If you've also worked with ABAP CDS Views, the syntax will feel very familiar,
+but Dictionary-level thinking is enough to follow everything here.)
 
 ---
 
@@ -88,7 +90,9 @@ Why projections and not direct exposure? It's a separation of concerns:
 - `srv/catalog.cds` is the service API (what the outside world sees)
 
 You could expose only some fields, or rename them, or add calculated fields —
-all without touching the database schema. This is the same pattern as ABAP CDS interface views.
+all without touching the database schema. This separation of "physical model" from
+"service API" is the same principle as ABAP's distinction between Dictionary tables
+and the views or BAPIs that expose them to the outside world.
 
 ---
 
