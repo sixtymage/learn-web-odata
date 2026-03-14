@@ -1,5 +1,5 @@
 # ============================================================
-# docker-compose.yml — Three-Tier Setup (Stage 5)
+# docker-compose.yml — Three-Tier Setup (Stage 7)
 #
 # Starts two services:
 #   db      — PostgreSQL database
@@ -77,6 +77,35 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  # ----------------------------------------------------------
+  # pgAdmin — PostgreSQL browser UI
+  #
+  # Lets you inspect the raw database tables while the CAP
+  # service is running (or stopped). The key demonstration:
+  # query the products table in SQL, then hit the OData endpoint
+  # and see the same rows — showing CAP is just a layer on top.
+  #
+  # URL:      http://localhost:5050
+  # Email:    admin@learn.local
+  # Password: admin
+  #
+  # To connect to the database inside pgAdmin:
+  #   Object → Register → Server
+  #   General tab → Name: learn-odata
+  #   Connection tab → Host: db  Port: 5432
+  #                    Database: odata_learn
+  #                    Username: cap_user  Password: cap_password
+  # ----------------------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL:    admin@learn.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
 
 # Named volume — PostgreSQL data persists here between restarts
 volumes:

@@ -69,6 +69,7 @@ she already knows what they're doing under the hood because she did it by hand f
 | SAP CAP introduction | `docs/04-cap-intro/README.md` |
 | OpenUI5 + data binding | `docs/05-sapui5-intro/README.md` |
 | OpenUI5 XML views + MVC | `docs/06-openui5-mvc/README.md` |
+| Docker + PostgreSQL + pgAdmin | `docs/07-docker-postgres/README.md` |
 
 ---
 

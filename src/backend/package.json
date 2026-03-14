@@ -12,12 +12,15 @@
   },
   "devDependencies": {
     "@sap/cds-dk": "^8",
+    "@cap-js/postgres": "^1",
     "sqlite3": "^5"
   },
   "scripts": {
-    "start": "cds-serve",
-    "watch": "cds watch",
-    "build": "cds build"
+    "start":     "cds-serve",
+    "watch":     "cds watch",
+    "build":     "cds build",
+    "deploy:pg": "cds deploy --profile postgres",
+    "watch:pg":  "cds watch --profile postgres"
   },
   "cds": {
     "requires": {
@@ -25,6 +28,20 @@
         "kind": "sqlite",
         "credentials": {
           "database": ":memory:"
+        }
+      }
+    },
+    "[postgres]": {
+      "requires": {
+        "db": {
+          "kind": "postgres",
+          "credentials": {
+            "host":     "localhost",
+            "port":     5432,
+            "database": "odata_learn",
+            "user":     "cap_user",
+            "password": "cap_password"
+          }
         }
       }
     }
