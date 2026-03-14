@@ -62,22 +62,35 @@ each screen would have its own view + controller pair.
 
 `App.js` is now much shorter than in Stage 5. Its only responsibilities are:
 1. Create the ODataModel (same configuration as Stage 5)
-2. Load the XML view — which automatically loads its controller
-3. Attach the model to the view
-4. Place the view into the page
+2. Create an `sap.m.App` shell and attach the model to it
+3. Load the XML view — which automatically loads its controller
+4. Add the view's root Page to the App shell and place it in the page
 
 ```javascript
+const oApp = new App();
+oApp.setModel(model);  // Set on App — all child controls inherit it
+
 XMLView.create({
     viewName: "stage6.view.Main"
 }).then(function (oView) {
-    oView.setModel(model);
-    oView.placeAt("content");
+    oApp.addPage(oView.getContent()[0]); // getContent()[0] is the sap.m.Page
+    oApp.placeAt("content");
 });
 ```
 
 The `viewName` string `"stage6.view.Main"` maps to `view/Main.view.xml` via the
 `resourceRoots` configuration in `index.html`. The `stage6` prefix is the module
 namespace; `view.Main` is the path within it.
+
+**Why `sap.m.App` is required here:**
+`sap.m.App` does more than act as a container — when rendered, it adds the CSS class
+`sapUiBody` to `<body>`. This class is what activates the Fiori theme layout: it sets
+`height: 100%` and `overflow: hidden` on the body, giving `sap.m.Page` the height
+reference it needs to fill the viewport correctly. Without it, the Page's content area
+collapses to zero height and only the unstyled title text is visible.
+
+In a real SAP BTP deployment the Fiori Launchpad plays this role, but in a standalone
+app you always need `sap.m.App` (or `sap.m.Shell`) at the root.
 
 ---
 
@@ -90,12 +103,13 @@ OpenUI5 JavaScript class:
 <mvc:View
     controllerName="stage6.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
 
   <Page title="Stage 6">
     <content>
       <Table id="productTable"
-             items="{path: '/Products', parameters: {$count: true}}"
+             items="{path: '/Products', parameters: {$count: true, $$operationMode: 'Server'}}"
              growing="true"
              growingThreshold="8">
         <columns>
@@ -127,6 +141,13 @@ Key XML binding syntax:
 | `press=".onSearch"` | Call the controller's `onSearch()` method on button press |
 
 The dot (`.`) prefix means "look in this view's controller".
+
+**Namespace note:** Every XML element resolves against a namespace. The default
+`xmlns="sap.m"` means unqualified tags like `<Button>` resolve to `sap.m.Button`.
+Controls from other libraries need an explicit prefix — for example, `sap.ui.core.Item`
+(used inside `<Select>`) must be declared as `xmlns:core="sap.ui.core"` and written
+as `<core:Item>`. Writing it as `<Item>` would look for `sap.m.Item`, which doesn't
+exist, and silently fail to load the view.
 
 **ABAP analogy:** `{Name}` is like `WA_PRODUCT-NAME` in a dynpro screen field —
 you declare the data source, and the runtime fills the value.

@@ -17,8 +17,9 @@
 
 sap.ui.define([
   "sap/ui/core/mvc/XMLView",
-  "sap/ui/model/odata/v4/ODataModel"
-], function (XMLView, ODataModel) {
+  "sap/ui/model/odata/v4/ODataModel",
+  "sap/m/App"
+], function (XMLView, ODataModel, App) {
   "use strict";
 
   // ODataModel: same as Stage 5, unchanged.
@@ -31,13 +32,22 @@ sap.ui.define([
                          // so requests are visible in the Network tab
   });
 
+  // sap.m.App is required even here — it adds the sapUiBody CSS class to
+  // <body>, which is what triggers the Fiori theme layout and gives
+  // sap.m.Page the height context it needs to render correctly.
+  const oApp = new App();
+  oApp.setModel(model);  // Set on App — all child controls inherit it
+
   // XMLView.create() loads view/Main.view.xml.
   // OpenUI5 also loads controller/Main.controller.js automatically
   // because the view declares controllerName="stage6.controller.Main".
   XMLView.create({
     viewName: "stage6.view.Main"
   }).then(function (oView) {
-    oView.setModel(model);    // All controls in the view can now bind to OData
-    oView.placeAt("content"); // Render into <div id="content"> in index.html
+    // The XMLView's root control is the sap.m.Page declared in Main.view.xml.
+    // We add it to the App (not the view itself) so the App shell is in charge
+    // of navigation and layout — the standard Fiori pattern.
+    oApp.addPage(oView.getContent()[0]);
+    oApp.placeAt("content");
   });
 });

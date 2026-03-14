@@ -25,6 +25,7 @@
     controllerName="stage6.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
     displayBlock="true">
 
@@ -62,11 +63,11 @@
             <Label text="Price Condition"/>
             <Select id="priceOp" width="180px">
               <items>
-                <Item key="" text="(no price filter)"/>
-                <Item key="GT" text="Price greater than"/>
-                <Item key="GE" text="Price greater or equal"/>
-                <Item key="LT" text="Price less than"/>
-                <Item key="LE" text="Price less or equal"/>
+                <core:Item key="" text="(no price filter)"/>
+                <core:Item key="GT" text="Price greater than"/>
+                <core:Item key="GE" text="Price greater or equal"/>
+                <core:Item key="LT" text="Price less than"/>
+                <core:Item key="LE" text="Price less or equal"/>
               </items>
             </Select>
           </VBox>
