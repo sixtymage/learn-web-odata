@@ -204,17 +204,7 @@ lets us scan the entire query — filter values, field names, search terms — i
 `req.error(400, "...")` sends an HTTP 400 response to the caller and stops all
 further processing. The database is never queried.
 
-**Try it:**
-
-1. Make sure `npm run watch` is running (it will have reloaded automatically when `catalog.js` was saved)
-2. Open the Stage 3 app
-3. Type `fuck` in the **Name contains** filter and click **Run Query**
-4. The error message `That search term is not permitted.` should appear in the results area
-5. Open DevTools → Network → confirm the response status is `400`
-
-Then compare with a network error (stop the backend entirely) — that shows a different
-message prompting you to restart the server. The UI distinguishes between
-"the server rejected your request" and "the server is not running".
+The full exercise — including testing this handler and adding your own word — is at the end of this doc.
 
 ---
 
@@ -245,5 +235,131 @@ This is the key design principle of CAP: environment-independent data model.
 
 ---
 
-*Ask Claude: "Explain exactly what happens between `npm run watch` starting and the first*
-*fetch() request arriving at the Products endpoint."*
+---
+
+## Exercise: Stage 4
+
+This exercise has three parts: test the existing profanity filter, extend it with your own
+word, and commit the change using git. You will be editing server-side JavaScript and
+seeing the effect immediately in the browser — no rebuild, no restart.
+
+---
+
+### Part 1 — Test the existing filter
+
+**What you need running:**
+
+- **Terminal 1:** `cd src/backend && npm run watch`
+- **Terminal 2:** `npx serve src/frontend/stage3-odata` (stop Stage 2's server first with `Ctrl+C` if still running)
+
+Open the Stage 3 app in your browser.
+
+**Steps:**
+
+1. In the **Name contains** filter, type `fuck` and click **Run Query**
+2. You should see the message `That search term is not permitted.` in red in the results area — not a generic error, the exact message from the server
+3. Open DevTools (**F12** → **Network** tab), find the `Products` request and confirm the status is `400`
+4. Clear the filter and run a normal query (e.g. Name contains `Laptop`) to confirm the service still works
+
+---
+
+### Part 2 — Add a word to the filter
+
+Now you will make a code change.
+
+**Step 1 — Open the file**
+
+In VS Code, open `src/backend/srv/catalog.js`.
+
+Find the `BLOCKED` array near the top of the `before("READ", Products, ...)` handler:
+
+```javascript
+const BLOCKED = ["fuck", "shit", "bastard"];
+```
+
+**Step 2 — Add a word**
+
+Add `"crap"` to the array:
+
+```javascript
+const BLOCKED = ["fuck", "shit", "bastard", "crap"];
+```
+
+Save the file (`Ctrl+S`).
+
+**Step 3 — Watch the server reload**
+
+Switch to Terminal 1. You should see the server restart automatically:
+
+```
+[cds] - server listening on { url: 'http://localhost:4004' }
+```
+
+This is the watch mode doing its job — the same auto-reload you would get when
+saving a `.cds` file. Your change is live without any manual restart.
+
+**Step 4 — Test your new word**
+
+Back in the Stage 3 app, type `crap` in the Name contains filter and click **Run Query**.
+You should get the same 400 error. The word you added is now blocked.
+
+---
+
+### Part 3 — Commit the change with git
+
+You have made a real code change to the repository. Now commit it properly.
+
+**Step 1 — See what changed**
+
+Open a terminal (you can use a third terminal, or reuse one that is free) and run:
+
+```bash
+git status
+```
+
+You should see `catalog.js` listed under "Changes not staged for commit". That tells you
+git has noticed the file was modified, but you have not told git to include it yet.
+
+**Step 2 — Review the diff**
+
+```bash
+git diff src/backend/srv/catalog.js
+```
+
+You will see something like:
+
+```diff
+-    const BLOCKED = ["fuck", "shit", "bastard"];
++    const BLOCKED = ["fuck", "shit", "bastard", "crap"];
+```
+
+Lines starting with `-` are what was there before. Lines starting with `+` are your change.
+This is git's way of showing exactly what is different — equivalent to a transport comparison in SAP.
+
+**Step 3 — Stage the file**
+
+```bash
+git add src/backend/srv/catalog.js
+```
+
+Run `git status` again. The file has moved from "Changes not staged" to
+"Changes to be staged". Staging means "I want this change included in my next commit."
+You can stage multiple files separately before committing — useful when you have
+unrelated changes you want in different commits.
+
+**Step 4 — Commit**
+
+```bash
+git commit -m "Add 'crap' to profanity filter"
+```
+
+Run `git status` one more time. The working tree should be clean — no pending changes.
+
+Your change is now recorded in the repository history. Run `git log --oneline -5` to
+see your commit alongside the others.
+
+---
+
+*Ask Claude: "What is the difference between `git add` and `git commit`?"*
+*or: "Show me all the hooks CAP supports — what else could I intercept?"*
+*or: "How would I write a handler that logs every query to the console?"*
