@@ -118,4 +118,4 @@ Press `Ctrl+,` to open Settings. These are worth enabling:
 ---
 
 *Ask Claude: "Can you explain what the schema.cds file is doing?"*
-*(Claude can read the file and explain it in detail — try it.)*
+*(Claude can read the file and explain it in detail — try it once Claude is installed.)*

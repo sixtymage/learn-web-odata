@@ -189,4 +189,4 @@ it means you can always go back if something breaks.
 
 ---
 
-*Ask Claude: "Show me what git commands I'd run to save my changes to stage2-fetch."*
+*Ask Claude (once it is installed): "Show me what git commands I'd run to save my changes to stage2-fetch."*

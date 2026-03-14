@@ -80,20 +80,6 @@ cds --version
 
 ---
 
-## What `npm install` Does (in Detail)
-
-When you run `npm install` in the `src/backend/` folder, npm:
-
-1. Reads `package.json` to find the list of required packages
-2. Downloads each package from the npm registry (the internet)
-3. Stores them in `src/backend/node_modules/`
-4. Creates/updates `package-lock.json` with exact version information
-
-The `node_modules/` folder is **not** committed to git (it's in `.gitignore`).
-Everyone who clones the repo runs `npm install` to get their own copy.
-
----
-
 ## The package.json File
 
 Open `src/backend/package.json` in VS Code. It has two important sections:
@@ -122,8 +108,3 @@ npm install <package>        # Install a specific package and add it to package.
 npm install -g <package>     # Install globally (available everywhere, not just this project)
 npm run <script>             # Run a script defined in package.json's "scripts" section
 ```
-
----
-
-*Once Node.js and the CDS CLI are installed, continue to `05-docker-setup.md`,*
-*then come back to start the backend with `cds watch`.*

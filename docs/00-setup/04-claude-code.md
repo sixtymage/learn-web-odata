@@ -111,11 +111,26 @@ For this learning path, always use **Claude Code** in the terminal, not the webs
 
 ---
 
-## Keyboard Shortcuts in Claude Code
+## Helpful Shortcuts and Features
 
-- `Enter` — submit your message
-- `Ctrl+C` — cancel current operation
-- `Ctrl+D` — exit Claude Code
+| What you want | How to do it |
+|---|---|
+| Submit your message | `Enter` |
+| New line without submitting | `Shift+Enter` |
+| Cancel current operation | `Ctrl+C` |
+| Exit Claude Code | `Ctrl+D` |
+| Scroll back through your prompts | `↑` / `↓` arrow keys |
+| Reference a specific file | Type `@` and start typing the filename — Claude Code will autocomplete it |
+| Reference a specific folder | Type `@` and type part of the folder path |
+| Clear the screen | `/clear` |
+
+### The `@` File Reference
+
+Instead of typing *"read the file src/backend/db/schema.cds"*, you can type `@` and pick the file directly:
+
+> *"Explain @schema.cds to me in ABAP terms"*
+
+Claude Code will pull in the file contents automatically. This works for any file in the repo.
 
 ---
 
