@@ -183,11 +183,47 @@ this is where you look first — it shows you exactly what was requested and wha
 
 ## Exercise: Stage 2
 
-1. Start the backend: `cd src/backend && npm run watch` (in a terminal window)
-2. Serve the frontend: `npx serve src/frontend/stage2-fetch` (in a second terminal window)
-3. Open the URL in your browser — the product table should load with live data
-4. Open DevTools → Network → reload → inspect the `Products` request
-5. Compare the JSON response to the hardcoded array in Stage 1
+You need to start two separate processes before opening the browser.
+Referring back to the diagram above: one process serves the HTML file,
+the other serves the data. Neither knows about the other — only the browser talks to both.
+
+**Process 1 — the OData backend** (the data server, port 4004):
+
+```bash
+cd src/backend
+npm run watch
+```
+
+Leave this terminal running. You should see `server listening on { url: 'http://localhost:4004' }`.
+
+**Process 2 — the static file server** (the HTML server, port 3000):
+
+Open a second terminal and run:
+
+```bash
+npx serve src/frontend/stage2-fetch
+```
+
+`npx serve` is a simple file server — it has no knowledge of OData or CAP.
+Its only job is to deliver the `index.html` file to your browser when asked.
+The reason you can't just double-click `index.html` is that browsers block `fetch()`
+calls from `file://` URLs for security reasons — the file must be served over HTTP.
+
+It will print a URL, something like `http://localhost:3000`. Leave this terminal running too.
+
+**Process 3 — the browser** (your Chrome or Edge):
+
+Open the URL that `npx serve` printed. The page loads in two steps:
+1. The browser fetches `index.html` from `npx serve` (port 3000)
+2. The JavaScript in that page calls `fetch()` to get product data from CAP (port 4004)
+
+The product table should populate with live data.
+
+**Then:**
+
+4. Open DevTools → Network → reload → you should see two requests: one for `index.html`, one for `Products`
+5. Click the `Products` request and examine the JSON response
+6. Compare it to the hardcoded array in `src/frontend/stage1-basics/index.html`
 
 When the table loads with real data from the server, you have made your first OData call.
 Everything from here — OData query parameters, OpenUI5 data binding — builds on this moment.
