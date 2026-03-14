@@ -33,9 +33,49 @@ The data resets on every restart, which is intentional for a development environ
 
 ---
 
+## Three Processes, Two Servers
+
+When you run Stage 2, three separate things are running at once:
+
+```
+┌──────────────────────┐                    ┌──────────────────────┐
+│                      │  1. GET index.html  │                      │
+│                      │ ──────────────────► │   npx serve          │
+│   Your Browser       │ ◄────────────────── │   localhost:3000     │
+│   (Chrome / Edge)    │    HTML + JS files  │   static file server │
+│                      │                     └──────────────────────┘
+│                      │  2. GET /Products
+│                      │ ──────────────────► ┌──────────────────────┐
+│                      │ ◄────────────────── │   npm run watch      │
+└──────────────────────┘  JSON { value:[...]}│   localhost:4004     │
+                                             │   CAP OData service  │
+                                             └──────────────────────┘
+```
+
+**Step 1 — page load:** The browser asks `npx serve` for `index.html`. It gets back the
+HTML and JavaScript. At this point, no data has moved yet.
+
+**Step 2 — data fetch:** The JavaScript in the page runs `fetch()`, which sends a second
+HTTP request — this time to the CAP backend on port 4004. CAP queries its in-memory
+SQLite database and returns the product data as JSON.
+
+The browser never talks to a database directly. It only ever makes HTTP requests.
+The two servers are completely independent — `npx serve` knows nothing about OData,
+and the CAP backend knows nothing about your HTML file.
+
+**ABAP analogy:** This is the same split as SAP's three-tier architecture:
+- Browser ≈ SAP GUI (thin client, just renders what it receives)
+- `npx serve` ≈ the ICM (Web Dispatcher, serves static content)
+- CAP backend ≈ the Application Server ABAP (runs business logic, queries the database)
+
+In Stage 5, `npx serve` goes away entirely — the CAP server will serve both the static
+files and the OData endpoint, just as a real SAP system does.
+
+---
+
 ## Verify the Service is Running
 
-Before opening the frontend, confirm the backend is responding. With `cds watch` running,
+Before opening the frontend, confirm the backend is responding. With `npm run watch` running,
 open a browser and go to:
 
 ```
@@ -117,7 +157,7 @@ The differences are intentionally minimal:
 | Data source | Hardcoded `const products = [...]` | `fetch()` from the CAP endpoint |
 | `renderProducts()` | Identical | Identical — same function, untouched |
 | Network calls | Zero | One GET request per page load |
-| Backend required | No | Yes — `cds watch` must be running |
+| Backend required | No | Yes — `npm run watch` must be running |
 
 The `renderProducts()` function is the same in both stages. This is deliberate:
 **the data source changed, but the rendering logic did not.** This is separation of concerns —
@@ -143,8 +183,8 @@ this is where you look first — it shows you exactly what was requested and wha
 
 ## Exercise: Stage 2
 
-1. Start the backend: `cd src/backend && npm run watch`
-2. Serve the frontend: `npx serve src/frontend/stage2-fetch` (in a second terminal)
+1. Start the backend: `cd src/backend && npm run watch` (in a terminal window)
+2. Serve the frontend: `npx serve src/frontend/stage2-fetch` (in a second terminal window)
 3. Open the URL in your browser — the product table should load with live data
 4. Open DevTools → Network → reload → inspect the `Products` request
 5. Compare the JSON response to the hardcoded array in Stage 1
