@@ -79,10 +79,18 @@ Start here to understand what the browser actually is and does.
 
 **Goal:** You know exactly what `$filter`, `$select`, `$expand` do at the URL level.
 
-#### Step 4 — OpenUI5 ([`docs/04-sapui5-intro/`](docs/04-sapui5-intro/) + [`src/frontend/stage4-openui5/`](src/frontend/stage4-openui5/))
+#### Step 4 — CAP Custom Handlers ([`docs/04-cap-intro/`](docs/04-cap-intro/))
 
-- Read [`docs/04-sapui5-intro/README.md`](docs/04-sapui5-intro/README.md)
-- Open [`src/frontend/stage4-openui5/index.html`](src/frontend/stage4-openui5/index.html)
+- Read [`docs/04-cap-intro/README.md`](docs/04-cap-intro/README.md)
+- Edit `src/backend/srv/catalog.js` to add a word to the profanity filter
+- Stage and commit the change with git
+
+**Goal:** You understand server-side JavaScript in CAP, and have done a real code change under git.
+
+#### Step 5 — OpenUI5 ([`docs/05-sapui5-intro/`](docs/05-sapui5-intro/) + [`src/frontend/stage5-openui5/`](src/frontend/stage5-openui5/))
+
+- Read [`docs/05-sapui5-intro/README.md`](docs/05-sapui5-intro/README.md)
+- Open [`src/frontend/stage5-openui5/index.html`](src/frontend/stage5-openui5/index.html)
 - See how ODataModel binding replaces the manual fetch() you wrote
 
 **Goal:** You understand what the Fiori framework is doing for you — because you did it first.
@@ -104,8 +112,9 @@ docs/
   00-setup/          01-git-primer, 02-vscode-setup, 03-claude-code, 04-node-setup, 05-docker-setup
   01-web-basics/     HTTP, HTML, JavaScript, JSON
   02-odata-concepts/ OData URL syntax and conventions
-  03-cap-intro/      What SAP CAP is and why it exists
-  04-sapui5-intro/   OpenUI5 and Fiori data binding
+  03-odata-concepts/ OData URL syntax and query options
+  04-cap-intro/      CAP custom handlers and server-side JS
+  05-sapui5-intro/   OpenUI5 and Fiori data binding
 
 src/
   backend/        SAP CAP service — the OData backend
@@ -113,7 +122,7 @@ src/
     stage1-basics/  No network; hardcoded data
     stage2-fetch/   fetch() against CAP
     stage3-odata/   OData query params, interactive
-    stage4-openui5/ OpenUI5 ODataModel + list binding
+    stage5-openui5/ OpenUI5 ODataModel + list binding
 ```
 
 ---

@@ -78,8 +78,9 @@ Open [`LEARNING.md`](LEARNING.md) — it walks you through the rest of the setup
 | Step | What you do | What you learn |
 |---|---|---|
 | Stage 3 | Open `stage3-odata/` with backend running | `$filter`, `$select`, `$orderby`, `$expand` — by hand |
-| Stage 4 | Open `stage4-openui5/` | ODataModel, data binding — the library does what you just wrote |
-| Stage 5 | `docker compose up` | Three-tier architecture: browser → CAP → PostgreSQL |
+| Stage 4 | Edit `srv/catalog.js` | CAP custom handlers — server-side JS, git commit workflow |
+| Stage 5 | Open `stage5-openui5/` | ODataModel, data binding — the library does what you just wrote |
+| Stage 6 | `docker compose up` | Three-tier architecture: browser → CAP → PostgreSQL |
 
 **Start here: [`LEARNING.md`](LEARNING.md)**
 
@@ -95,7 +96,8 @@ learn-web-odata/
 │   ├── 01-web-basics/       HTTP, HTML, JavaScript, JSON
 │   ├── 02-odata-concepts/   $filter, $select, $expand and friends
 │   ├── 03-cap-intro/        CDS models, service definitions, the watch command
-│   └── 04-sapui5-intro/     ODataModel, data binding, Fiori context
+│   ├── 04-cap-intro/        CAP custom handlers, server-side JS
+│   └── 05-sapui5-intro/     ODataModel, data binding, Fiori context
 ├── src/
 │   ├── backend/             SAP CAP service
 │   │   ├── db/schema.cds    Products, Categories, Orders, OrderItems
@@ -105,7 +107,7 @@ learn-web-odata/
 │       ├── stage1-basics/   Hardcoded data — HTML and JS fundamentals
 │       ├── stage2-fetch/    Live data via fetch()
 │       ├── stage3-odata/    Interactive OData query builder
-│       └── stage4-openui5/  OpenUI5 ODataModel + list binding
+│       └── stage5-openui5/  OpenUI5 ODataModel + list binding
 └── docker-compose.yml       CAP + PostgreSQL
 ```
 

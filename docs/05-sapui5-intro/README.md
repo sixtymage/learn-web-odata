@@ -42,18 +42,18 @@ you typed by hand in Stage 3. You already know what's happening.
 
 ## Loading OpenUI5 from CDN
 
-In Stage 4, we load OpenUI5 from a CDN (Content Delivery Network) — no build step, no npm.
+In Stage 5, we load OpenUI5 from a CDN (Content Delivery Network) — no build step, no npm.
 
 ```html
 <script
   id="sap-ui-bootstrap"
-  src="https://ui5.sap.com/1.120.0/resources/sap-ui-core.js"
+  src="https://ui5.sap.com/1.120.17/resources/sap-ui-core.js"
   data-sap-ui-theme="sap_horizon"
-  data-sap-ui-libs="sap.m"
+  data-sap-ui-libs="sap.m,sap.ui.layout,sap.ui.table"
   data-sap-ui-compatVersion="edge"
   data-sap-ui-async="true"
-  data-sap-ui-onInit="module:myapp/App"
-  data-sap-ui-resourceroots='{"myapp": "./"}'
+  data-sap-ui-onInit="module:stage5/App"
+  data-sap-ui-resourceRoots='{"stage5": "./"}'
 ></script>
 ```
 
@@ -71,13 +71,14 @@ This one `<script>` tag:
 The `ODataModel` is the bridge between your UI and the OData service.
 
 ```javascript
-const model = new sap.ui.model.odata.v4.ODataModel({
-    serviceUrl: "/odata/v4/catalog/",
-    synchronizationMode: "None"
+const model = new ODataModel({
+    serviceUrl: "http://localhost:4004/odata/v4/catalog/",
+    synchronizationMode: "None",
+    autoExpandSelect: true     // Automatically adds $select for used properties
 });
 
-// Attach it to the app
-this.getView().setModel(model);
+// Set it on the App — all child controls inherit it
+oApp.setModel(model);
 ```
 
 Once attached, all controls in the view can bind to data from the OData service.
@@ -176,7 +177,9 @@ This is a further abstraction — the layout is declarative XML, and JavaScript 
 OpenUI5 compiles this XML into the same JavaScript control objects. The binding syntax
 `{Name}` and `{Price}` works the same way.
 
-Stage 4 starts with JavaScript-only (no XML views) for clarity, then introduces the XML approach.
+Stage 5 is JavaScript-only (no XML views) for clarity — you can see exactly what OpenUI5
+is doing without any additional abstraction. Real Fiori apps use XML views, which is
+covered in Stage 6.
 
 ---
 
@@ -187,8 +190,8 @@ OpenUI5 uses MVC (Model-View-Controller):
 | Part | Role | In this repo |
 |---|---|---|
 | Model | Data and data access (ODataModel) | The CAP OData service |
-| View | What the user sees (XML or JS) | `stage4-openui5/view/` |
-| Controller | Logic, event handlers | `stage4-openui5/controller/` |
+| View | What the user sees (XML or JS) | `stage5-openui5/` (JS only — Stage 6 adds XML) |
+| Controller | Logic, event handlers | Embedded in `App.js` (Stage 6 splits this out) |
 
 **ABAP analogy:** MVC maps roughly to the ABAP separation of:
 - Data layer (tables + CDS views) → Model
@@ -210,21 +213,43 @@ What you're learning here is the foundation underneath all of that.
 
 ---
 
-## Exercise: Stage 4
+## Exercise: Stage 5
 
-Open `src/frontend/stage4-openui5/index.html`.
+**Terminal 1 — data server** (skip if still running):
+```bash
+cd src/backend
+npm run watch
+```
 
-Compare it side by side with `stage2-fetch/index.html`.
+**Terminal 2 — page server** (stop Stage 3's server first with `Ctrl+C`):
+```bash
+npx serve src/frontend/stage5-openui5
+```
+
+Open the URL it prints in your browser.
+
+**What to observe:**
+
+1. Open DevTools (**F12** → **Network** tab) before interacting with the page
+2. Reload — you should see two requests fire automatically:
+   - `GET $metadata` — OpenUI5 reads the service description first
+   - `GET Products?...` — then fetches the first page of data
+3. Type a name in the filter box and click **Search** — watch the Network tab. The URL should include `$filter=contains(Name,'...')` — exactly what you typed by hand in Stage 3
+4. Click **More** at the bottom of the table — watch `$skip` appear in the URL
+
+**Compare the code:**
+
+Open `src/frontend/stage5-openui5/App.js` alongside `src/frontend/stage2-fetch/index.html`.
 
 Notice:
-- The `fetch()` is gone — replaced by ODataModel
-- The DOM manipulation is gone — replaced by data binding
-- The code is shorter but does more (sorting, filtering, paging all come for free)
+- The `fetch()` call is gone — replaced by `ODataModel`
+- The `response.json()` and DOM manipulation is gone — replaced by data binding
+- `$filter`, `$orderby`, `$top`, `$skip` are assembled by the framework, not written by hand
+- The code is shorter, yet does considerably more
 
-Try using the Filter button. Open the Network tab (F12) and watch what URL gets fired.
-It should look exactly like the URLs you typed in Stage 3.
+The ODataModel is doing exactly what you did in Stages 2 and 3 — it has just automated it.
 
 ---
 
 *Ask Claude: "Explain the difference between property binding ({Name}) and aggregation binding ({/Products}) in OpenUI5."*
-*or: "What's happening between when I click the Filter button and when the filtered data appears in the list?"*
+*or: "What's happening between when I click the Search button and when the filtered data appears in the table?"*

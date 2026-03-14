@@ -1,8 +1,8 @@
 // ============================================================
-// Stage 4 — OpenUI5 Application Entry Point
+// Stage 5 — OpenUI5 Application Entry Point
 //
 // This module runs after OpenUI5 loads (configured via
-// data-sap-ui-onInit="module:stage4/App" in index.html).
+// data-sap-ui-onInit="module:stage5/App" in index.html).
 //
 // It creates:
 //   1. An ODataModel connected to the CAP backend

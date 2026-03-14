@@ -49,8 +49,9 @@ she already knows what they're doing under the hood because she did it by hand f
 | 1 | `src/frontend/stage1-basics/` | HTML, JS, the DOM — client side with no network calls |
 | 2 | `src/frontend/stage2-fetch/` | `fetch()` against a live CAP OData endpoint |
 | 3 | `src/frontend/stage3-odata/` | OData query params by hand: `$filter`, `$select`, `$expand` |
-| 4 | `src/frontend/stage4-openui5/` | OpenUI5 ODataModel replaces the manual fetch — same queries, library does the work |
-| 5 | `docker-compose.yml` | Three-tier architecture: browser → CAP service → PostgreSQL |
+| 4 | *(no frontend stage)* | CAP custom handlers — server-side JavaScript, BAdI analogy |
+| 5 | `src/frontend/stage5-openui5/` | OpenUI5 ODataModel replaces the manual fetch — same queries, library does the work |
+| 6 | `docker-compose.yml` | Three-tier architecture: browser → CAP service → PostgreSQL |
 
 ### Documentation Map
 
