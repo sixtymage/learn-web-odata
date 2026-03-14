@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+  STAGE 6: OpenUI5 XML Views + MVC
+  ==================================
+  This page is functionally identical to Stage 5.
+  The difference is structural:
+
+  Stage 5: Everything in one App.js file — ODataModel, UI controls,
+           event handlers, formatters all mixed together.
+
+  Stage 6: Split into three files:
+    - App.js             Creates the ODataModel and bootstraps the view
+    - view/Main.view.xml Declares the UI structure (what it looks like)
+    - controller/Main.controller.js Handles events and formatting (what it does)
+
+  This is how real Fiori apps are structured.
+
+  ABAP analogy:
+    view/Main.view.xml          = Dynpro screen layout (the .screen definition)
+    controller/Main.controller.js = PAI/PBO logic (the flow logic and modules)
+    App.js                      = The program bootstrap (the main REPORT)
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 6 — OpenUI5 XML Views + MVC</title>
+  <style>
+    body { margin: 0; }
+    .stage-banner {
+      background: #0a6ed1;
+      color: white;
+      padding: 8px 16px;
+      font-family: Arial, sans-serif;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stage-banner">
+    <strong>Stage 6</strong> — OpenUI5 XML Views + MVC
+  </div>
+
+  <div id="content"></div>
+
+  <script
+    id="sap-ui-bootstrap"
+    src="https://ui5.sap.com/1.120.17/resources/sap-ui-core.js"
+    data-sap-ui-theme="sap_horizon"
+    data-sap-ui-libs="sap.m,sap.ui.layout"
+    data-sap-ui-compatVersion="edge"
+    data-sap-ui-async="true"
+    data-sap-ui-onInit="module:stage6/App"
+    data-sap-ui-resourceRoots='{"stage6": "./"}'
+  ></script>
+
+</body>
+</html>

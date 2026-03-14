@@ -95,7 +95,15 @@ Start here to understand what the browser actually is and does.
 
 **Goal:** You understand what the Fiori framework is doing for you — because you did it first.
 
-#### Step 5 — Docker / Three-Tier ([`docs/00-setup/05-docker-setup.md`](docs/00-setup/05-docker-setup.md))
+#### Step 6 — XML Views + MVC ([`docs/06-openui5-mvc/`](docs/06-openui5-mvc/) + [`src/frontend/stage6-openui5-mvc/`](src/frontend/stage6-openui5-mvc/))
+
+- Read [`docs/06-openui5-mvc/README.md`](docs/06-openui5-mvc/README.md)
+- Open `src/frontend/stage6-openui5-mvc/` — the Stage 5 app rewritten with XML views and a controller
+- Compare `view/Main.view.xml` to Stage 5's control construction code
+
+**Goal:** You understand the MVC structure used in all real Fiori apps.
+
+#### Step 7 — Docker / Three-Tier ([`docs/00-setup/05-docker-setup.md`](docs/00-setup/05-docker-setup.md))
 
 - Read the Docker doc
 - Run `docker compose up`
@@ -115,6 +123,7 @@ docs/
   03-odata-concepts/ OData URL syntax and query options
   04-cap-intro/      CAP custom handlers and server-side JS
   05-sapui5-intro/   OpenUI5 and Fiori data binding
+  06-openui5-mvc/    XML views and MVC structure
 
 src/
   backend/        SAP CAP service — the OData backend
@@ -122,7 +131,8 @@ src/
     stage1-basics/  No network; hardcoded data
     stage2-fetch/   fetch() against CAP
     stage3-odata/   OData query params, interactive
-    stage5-openui5/ OpenUI5 ODataModel + list binding
+    stage5-openui5/     OpenUI5 ODataModel + list binding
+    stage6-openui5-mvc/ XML views + MVC structure
 ```
 
 ---

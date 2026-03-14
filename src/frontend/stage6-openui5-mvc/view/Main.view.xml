@@ -1,0 +1,138 @@
+<!--
+  Main.view.xml — The UI Structure
+  ==================================
+  This file declares WHAT the page looks like.
+  It does not contain any JavaScript logic.
+
+  The controllerName attribute connects this view to its controller.
+  OpenUI5 creates an instance of Main.controller.js automatically
+  and makes it available as 'this' inside the controller methods.
+
+  Key XML binding syntax:
+    items="{/Products}"         Aggregation binding — bind the list to the Products entity set
+    text="{Name}"               Property binding — bind a control property to a field value
+    formatter=".formatPrice"    Run the value through a controller method before displaying
+    press=".onSearch"           Call a controller method when the button is pressed
+
+  The dot (.) before method names means "look in this view's controller".
+
+  ABAP analogy:
+    This file is like a Dynpro screen layout definition — it describes
+    what is on the screen and where, but not the logic behind it.
+    The controller is the equivalent of the flow logic and PAI/PBO modules.
+-->
+<mvc:View
+    controllerName="stage6.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    displayBlock="true">
+
+  <Page title="Stage 6 — OpenUI5 XML Views + MVC">
+
+    <content>
+
+      <!-- =====================================================
+           INFO STRIP
+           Reminds the learner to check the Network tab.
+           Compare to the MessageStrip in Stage 5's App.js.
+           Same control, same properties — just declared in XML.
+           ===================================================== -->
+      <MessageStrip
+          text="Tip: Open DevTools (F12) → Network tab, then click Search. You'll see GET requests to /odata/v4/catalog/Products with $filter, $top, $skip."
+          type="Information"
+          showIcon="true"
+          class="sapUiSmallMargin"/>
+
+      <!-- =====================================================
+           FILTER BAR
+           Name input + price operator + price value + buttons.
+           The IDs (nameInput, priceOp, priceInput) are used by
+           the controller's this.byId("nameInput") calls.
+           ===================================================== -->
+      <l:VerticalLayout class="sapUiSmallMarginBegin sapUiSmallMarginEnd sapUiSmallMarginTop" width="100%">
+        <HBox alignItems="Center" wrap="Wrap">
+
+          <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+            <Label text="Name"/>
+            <Input id="nameInput" placeholder="Filter by name..." width="200px"/>
+          </VBox>
+
+          <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+            <Label text="Price Condition"/>
+            <Select id="priceOp" width="180px">
+              <items>
+                <Item key="" text="(no price filter)"/>
+                <Item key="GT" text="Price greater than"/>
+                <Item key="GE" text="Price greater or equal"/>
+                <Item key="LT" text="Price less than"/>
+                <Item key="LE" text="Price less or equal"/>
+              </items>
+            </Select>
+          </VBox>
+
+          <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+            <Label text="Value"/>
+            <Input id="priceInput" placeholder="e.g. 100" width="100px" type="Number"/>
+          </VBox>
+
+          <VBox class="sapUiSmallMarginBottom">
+            <Label text="&#160;"/><!-- non-breaking space to align with labelled inputs above -->
+            <HBox>
+              <Button text="Search" type="Emphasized" press=".onSearch"/>
+              <Button text="Reset" press=".onReset"/>
+            </HBox>
+          </VBox>
+
+        </HBox>
+      </l:VerticalLayout>
+
+      <!-- =====================================================
+           PRODUCT TABLE
+           Bound to the /Products entity set.
+           growing="true" enables "More" button paging ($skip).
+           growingThreshold="8" sets the page size ($top=8).
+
+           Each ColumnListItem is a row template.
+           {Name}, {Price} etc. are property bindings.
+           formatter=".formatPrice" calls the controller method.
+           ===================================================== -->
+      <Table
+          id="productTable"
+          items="{path: '/Products', parameters: {$count: true}}"
+          growing="true"
+          growingThreshold="8">
+
+        <columns>
+          <Column width="60px">  <Label text="ID"/>      </Column>
+          <Column width="220px"> <Label text="Name"/>    </Column>
+          <Column width="140px"> <Label text="Category"/></Column>
+          <Column>               <Label text="Price"/>   </Column>
+          <Column>               <Label text="Stock"/>   </Column>
+        </columns>
+
+        <items>
+          <ColumnListItem>
+            <cells>
+              <Text text="{ID}"/>
+              <Text text="{Name}"/>
+              <Text text="{Category_ID}"/>
+
+              <!-- formatter=".formatPrice" calls controller method formatPrice(value) -->
+              <Text text="{path: 'Price', formatter: '.formatPrice'}"/>
+
+              <!-- ObjectStatus shows stock with colour: Error/Warning/Success -->
+              <ObjectStatus
+                  text="{path: 'Stock', formatter: '.formatStockText'}"
+                  state="{path: 'Stock', formatter: '.formatStockState'}"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+
+      </Table>
+
+    </content>
+
+  </Page>
+
+</mvc:View>

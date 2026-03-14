@@ -51,7 +51,8 @@ she already knows what they're doing under the hood because she did it by hand f
 | 3 | `src/frontend/stage3-odata/` | OData query params by hand: `$filter`, `$select`, `$expand` |
 | 4 | *(no frontend stage)* | CAP custom handlers — server-side JavaScript, BAdI analogy |
 | 5 | `src/frontend/stage5-openui5/` | OpenUI5 ODataModel replaces the manual fetch — same queries, library does the work |
-| 6 | `docker-compose.yml` | Three-tier architecture: browser → CAP service → PostgreSQL |
+| 6 | `src/frontend/stage6-openui5-mvc/` | Same app rewritten with XML views + MVC — the real Fiori structure |
+| 7 | `docker-compose.yml` | Three-tier architecture: browser → CAP service → PostgreSQL |
 
 ### Documentation Map
 
@@ -67,6 +68,7 @@ she already knows what they're doing under the hood because she did it by hand f
 | OData concepts + URL syntax | `docs/03-odata-concepts/README.md` |
 | SAP CAP introduction | `docs/04-cap-intro/README.md` |
 | OpenUI5 + data binding | `docs/05-sapui5-intro/README.md` |
+| OpenUI5 XML views + MVC | `docs/06-openui5-mvc/README.md` |
 
 ---
 
