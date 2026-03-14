@@ -236,9 +236,23 @@ the Network tab shows you exactly what it asked for and what came back.
 
 ## Exercise: Stage 3
 
-Open `src/frontend/stage3-odata/index.html`.
+**Terminal 1 — data server** (skip if still running from Stage 2):
+```bash
+cd src/backend
+npm run watch
+```
+
+**Terminal 2 — page server:**
+
+If `npx serve` is still running from Stage 2, stop it first (`Ctrl+C`), then:
+```bash
+npx serve src/frontend/stage3-odata
+```
+
+Open the URL it prints in your browser.
 
 This page has filter controls that let you construct OData queries by typing.
+The exact URL being sent is shown above the results — watch it change as you adjust the filters.
 Work through each query option:
 
 1. Filter products by price (`$filter=Price gt X`)
