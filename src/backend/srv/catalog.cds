@@ -17,7 +17,7 @@
 //     into SQL queries against the database
 // ============================================================
 
-using products.db from '../db/schema';
+using { products.db as db } from '../db/schema';
 
 // CatalogService is accessible at: /odata/v4/catalog
 // For example: http://localhost:4004/odata/v4/catalog/Products
@@ -26,17 +26,17 @@ service CatalogService @(path: '/odata/v4/catalog') {
     // Products — readable and annotated as "read only" for the learning path.
     // Remove @readonly to allow POST/PATCH/DELETE from the UI.
     @readonly
-    entity Products   as projection on products.db.Products;
+    entity Products   as projection on db.Products;
 
     // Categories — lookup values for product categories
     @readonly
-    entity Categories as projection on products.db.Categories;
+    entity Categories as projection on db.Categories;
 
     // Orders — full CRUD (create, read, update, delete)
     // Try: POST to /odata/v4/catalog/Orders with a JSON body
-    entity Orders     as projection on products.db.Orders;
+    entity Orders     as projection on db.Orders;
 
     // OrderItems — typically accessed via $expand on Orders,
     // but also directly accessible here
-    entity OrderItems as projection on products.db.OrderItems;
+    entity OrderItems as projection on db.OrderItems;
 }
